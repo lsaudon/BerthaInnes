@@ -8,19 +8,19 @@ namespace BerthaInnes
     {
         private readonly DecisionProjection _decisionProjection;
 
-        public Order(IEnumerable<DomainEvent> domainEvents)
+        public Order(IEnumerable<IDomainEvent> domainEvents)
         {
             _decisionProjection = new DecisionProjection();
             HydrateProjection(domainEvents);
         }
 
-        public List<DomainEvent> Decide(DomainCommand command)
+        public List<IDomainEvent> Decide(IDomainCommand command)
         {
             var domainEvents = command switch
             {
                 StartOrder startOrder => Decide(startOrder),
                 TakeMarchandise takeMarchandise => Decide(takeMarchandise),
-                _ => new List<DomainEvent>()
+                _ => new List<IDomainEvent>()
             };
 
             HydrateProjection(domainEvents);
@@ -28,30 +28,30 @@ namespace BerthaInnes
             return domainEvents;
         }
 
-        private List<DomainEvent> Decide(StartOrder startOrder)
+        private List<IDomainEvent> Decide(StartOrder startOrder)
         {
-            return new List<DomainEvent> { new OrderStarted(startOrder.ColisList, startOrder.ColisList.Count) };
+            return new List<IDomainEvent> { new OrderStarted(startOrder.ColisList, startOrder.ColisList.Count) };
         }
 
-        private List<DomainEvent> Decide(TakeMarchandise takeMarchandise)
+        private List<IDomainEvent> Decide(TakeMarchandise takeMarchandise)
         {
-            if (_decisionProjection.IsMarchandiseReceived) return new List<DomainEvent>();
+            if (_decisionProjection.IsMarchandiseReceived) return new List<IDomainEvent>();
 
-            if (!_decisionProjection.IsStarted) return new List<DomainEvent>();
+            if (!_decisionProjection.IsStarted) return new List<IDomainEvent>();
 
             if (_decisionProjection.NumberColisRemaining > takeMarchandise.ColisList.Count)
             {
                 var numberColisRemaining = _decisionProjection.NumberColisRemaining - takeMarchandise.ColisList.Count;
-                return new List<DomainEvent>
+                return new List<IDomainEvent>
                 {
                     new MarchandisePartiallyReceived(takeMarchandise.ColisList, numberColisRemaining)
                 };
             }
 
-            return new List<DomainEvent> { new MarchandiseReceived() };
+            return new List<IDomainEvent> { new MarchandiseReceived() };
         }
 
-        private void HydrateProjection(IEnumerable<DomainEvent> domainEvents)
+        private void HydrateProjection(IEnumerable<IDomainEvent> domainEvents)
         {
             foreach (var domainEvent in domainEvents)
             {
@@ -65,7 +65,7 @@ namespace BerthaInnes
             public bool IsMarchandiseReceived { get; private set; }
             public int NumberColisRemaining { get; private set; }
 
-            public void Apply(DomainEvent domainEvent)
+            public void Apply(IDomainEvent domainEvent)
             {
                 switch (domainEvent)
                 {

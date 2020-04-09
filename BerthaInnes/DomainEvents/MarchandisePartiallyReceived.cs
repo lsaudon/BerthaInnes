@@ -2,7 +2,7 @@
 
 namespace BerthaInnes.DomainEvents
 {
-    public struct MarchandisePartiallyReceived : DomainEvent
+    public struct MarchandisePartiallyReceived : IDomainEvent
     {
         public List<Colis> ColisList { get; }
         public int NumberColisRemaining { get; }

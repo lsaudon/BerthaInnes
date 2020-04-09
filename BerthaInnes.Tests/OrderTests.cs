@@ -11,7 +11,7 @@ namespace BerthaInnes.Tests
         [Fact]
         public void When_StartOrder_Then_raise_OrderStarted()
         {
-            var aggregate = new Order(new List<DomainEvent>());
+            var aggregate = new Order(new List<IDomainEvent>());
 
             var domainEvents = aggregate.Decide(new StartOrder(new List<Colis>()));
 
@@ -22,7 +22,7 @@ namespace BerthaInnes.Tests
         [Fact]
         public void Given_OrderStarted_When_send_TakeMarchandise_Then_Raise_MarchandiseReceived()
         {
-            var events = new List<DomainEvent> { new OrderStarted(new List<Colis>(), 0) };
+            var events = new List<IDomainEvent> { new OrderStarted(new List<Colis>(), 0) };
             var aggregate = new Order(events);
 
             var domainEvents = aggregate.Decide(new TakeMarchandise(new List<Colis>()));
@@ -33,7 +33,7 @@ namespace BerthaInnes.Tests
         [Fact]
         public void When_Send_TakeMarchandise_Then_Raise_MarchandiseReceived()
         {
-            var aggregate = new Order(new List<DomainEvent>());
+            var aggregate = new Order(new List<IDomainEvent>());
 
             var domainEvents = aggregate.Decide(new TakeMarchandise(new List<Colis>()));
 
@@ -43,7 +43,7 @@ namespace BerthaInnes.Tests
         [Fact]
         public void Given_OrderWithMarchandiseReceived_When_TakeMarchandise_Then_Raise_Nothing()
         {
-            var aggregate = new Order(new List<DomainEvent>());
+            var aggregate = new Order(new List<IDomainEvent>());
             aggregate.Decide(new StartOrder(new List<Colis>()));
             aggregate.Decide(new TakeMarchandise(new List<Colis>()));
 
@@ -64,7 +64,7 @@ namespace BerthaInnes.Tests
                 new Colis(),
                 new Colis()
             };
-            var events = new List<DomainEvent> { new OrderStarted(colisList, 7) };
+            var events = new List<IDomainEvent> { new OrderStarted(colisList, 7) };
             var aggregate = new Order(events);
 
             var domainEvents = aggregate.Decide(new TakeMarchandise(colisList.Take(5).ToList()));
@@ -85,7 +85,7 @@ namespace BerthaInnes.Tests
                 new Colis(),
                 new Colis()
             };
-            var events = new List<DomainEvent>
+            var events = new List<IDomainEvent>
             {
                 new OrderStarted(colisList,7),
                 new MarchandisePartiallyReceived(colisList.Take(5).ToList(),2)
@@ -110,7 +110,7 @@ namespace BerthaInnes.Tests
                 new Colis(),
                 new Colis()
             };
-            var events = new List<DomainEvent>
+            var events = new List<IDomainEvent>
             {
                 new OrderStarted(colisList,7),
                 new MarchandisePartiallyReceived(colisList.Take(3).ToList(),4)

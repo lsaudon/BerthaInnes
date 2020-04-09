@@ -2,7 +2,7 @@
 
 namespace BerthaInnes.DomainEvents
 {
-    public struct OrderStarted : DomainEvent
+    public struct OrderStarted : IDomainEvent
     {
         public List<Colis> ColisList { get; }
         public int NumberColis { get; }

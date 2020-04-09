@@ -2,7 +2,7 @@
 
 namespace BerthaInnes.DomainCommands
 {
-    public struct TakeMarchandise : DomainCommand
+    public struct TakeMarchandise : IDomainCommand
     {
         public List<Colis> ColisList { get; }
 
