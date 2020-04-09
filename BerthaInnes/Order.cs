@@ -6,42 +6,40 @@ namespace BerthaInnes
 {
     public class Order
     {
-        private readonly DecisionProjection _decisionProjection;
-
-        public Order(IEnumerable<IDomainEvent> domainEvents)
+        public static IEnumerable<IDomainEvent> Decide(IDomainCommand command, IEnumerable<IDomainEvent> pastEvents)
         {
-            _decisionProjection = new DecisionProjection();
-            HydrateProjection(domainEvents);
-        }
-
-        public List<IDomainEvent> Decide(IDomainCommand command)
-        {
-            var domainEvents = command switch
+            var decisionProjection = new DecisionProjection();
+            foreach (var domainEvent in pastEvents)
             {
-                StartOrder startOrder => Decide(startOrder),
-                TakeMarchandise takeMarchandise => Decide(takeMarchandise),
+                decisionProjection.Apply(domainEvent);
+            }
+
+            var uncommittedEvents = command switch
+            {
+                StartOrder startOrder => Decide(startOrder, decisionProjection),
+                TakeMarchandise takeMarchandise => Decide(takeMarchandise, decisionProjection),
                 _ => new List<IDomainEvent>()
             };
 
-            HydrateProjection(domainEvents);
-
-            return domainEvents;
+            return uncommittedEvents;
         }
 
-        private List<IDomainEvent> Decide(StartOrder startOrder)
+        private static IEnumerable<IDomainEvent> Decide(StartOrder startOrder, DecisionProjection decisionProjection)
         {
+            if (decisionProjection.IsStarted) return new List<IDomainEvent>();
+
             return new List<IDomainEvent> { new OrderStarted(startOrder.ColisList.Count) };
         }
 
-        private List<IDomainEvent> Decide(TakeMarchandise takeMarchandise)
+        private static IEnumerable<IDomainEvent> Decide(TakeMarchandise takeMarchandise, DecisionProjection decisionProjection)
         {
-            if (_decisionProjection.IsMarchandiseReceived) return new List<IDomainEvent>();
+            if (decisionProjection.IsMarchandiseReceived) return new List<IDomainEvent>();
 
-            if (!_decisionProjection.IsStarted) return new List<IDomainEvent>();
+            if (!decisionProjection.IsStarted) return new List<IDomainEvent>();
 
-            if (_decisionProjection.NumberColisRemaining > takeMarchandise.ColisList.Count)
+            if (decisionProjection.NumberColisRemaining > takeMarchandise.ColisList.Count)
             {
-                var numberColisRemaining = _decisionProjection.NumberColisRemaining - takeMarchandise.ColisList.Count;
+                var numberColisRemaining = decisionProjection.NumberColisRemaining - takeMarchandise.ColisList.Count;
                 return new List<IDomainEvent>
                 {
                     new MarchandisePartiallyReceived(numberColisRemaining)
@@ -49,14 +47,6 @@ namespace BerthaInnes
             }
 
             return new List<IDomainEvent> { new MarchandiseReceived() };
-        }
-
-        private void HydrateProjection(IEnumerable<IDomainEvent> domainEvents)
-        {
-            foreach (var domainEvent in domainEvents)
-            {
-                _decisionProjection.Apply(domainEvent);
-            }
         }
 
         private class DecisionProjection

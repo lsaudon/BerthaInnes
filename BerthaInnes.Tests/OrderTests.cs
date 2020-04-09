@@ -11,31 +11,34 @@ namespace BerthaInnes.Tests
         [Fact]
         public void When_StartOrder_Then_raise_OrderStarted()
         {
-            var aggregate = new Order(new List<IDomainEvent>());
+            var domainEvents = Order.Decide(new StartOrder(new List<Colis>()), new List<IDomainEvent>());
 
-            var domainEvents = aggregate.Decide(new StartOrder(new List<Colis>()));
-
-            var domainEvent = domainEvents.Last();
-            Assert.Equal(typeof(OrderStarted), domainEvent.GetType());
+            Assert.Contains(domainEvents, e => e is OrderStarted);
         }
 
         [Fact]
         public void Given_OrderStarted_When_send_TakeMarchandise_Then_Raise_MarchandiseReceived()
         {
             var events = new List<IDomainEvent> { new OrderStarted(0) };
-            var aggregate = new Order(events);
 
-            var domainEvents = aggregate.Decide(new TakeMarchandise(new List<Colis>()));
+            var domainEvents = Order.Decide(new TakeMarchandise(new List<Colis>()), events);
 
             Assert.Contains(domainEvents, e => e is MarchandiseReceived);
         }
 
         [Fact]
+        public void Given_OrderStarted_When_OrderStarted_Then_Raise_Nothing()
+        {
+            var events = new List<IDomainEvent> { new OrderStarted(0) };
+
+            var domainEvents = Order.Decide(new StartOrder(new List<Colis>()), events);
+            Assert.Empty(domainEvents);
+        }
+
+        [Fact]
         public void When_Send_TakeMarchandise_Then_Raise_MarchandiseReceived()
         {
-            var aggregate = new Order(new List<IDomainEvent>());
-
-            var domainEvents = aggregate.Decide(new TakeMarchandise(new List<Colis>()));
+            var domainEvents = Order.Decide(new TakeMarchandise(new List<Colis>()), new List<IDomainEvent>());
 
             Assert.Empty(domainEvents);
         }
@@ -43,11 +46,9 @@ namespace BerthaInnes.Tests
         [Fact]
         public void Given_OrderWithMarchandiseReceived_When_TakeMarchandise_Then_Raise_Nothing()
         {
-            var aggregate = new Order(new List<IDomainEvent>());
-            aggregate.Decide(new StartOrder(new List<Colis>()));
-            aggregate.Decide(new TakeMarchandise(new List<Colis>()));
+            var events = new List<IDomainEvent> { new OrderStarted(0), new MarchandiseReceived() };
 
-            var domainEvents = aggregate.Decide(new TakeMarchandise(new List<Colis>()));
+            var domainEvents = Order.Decide(new TakeMarchandise(new List<Colis>()), events);
             Assert.Empty(domainEvents);
         }
 
@@ -65,9 +66,8 @@ namespace BerthaInnes.Tests
                 new Colis()
             };
             var events = new List<IDomainEvent> { new OrderStarted(7) };
-            var aggregate = new Order(events);
 
-            var domainEvents = aggregate.Decide(new TakeMarchandise(colisList.Take(5).ToList()));
+            var domainEvents = Order.Decide(new TakeMarchandise(colisList.Take(5).ToList()), events);
 
             Assert.Contains(domainEvents, e => e is MarchandisePartiallyReceived);
         }
@@ -90,9 +90,8 @@ namespace BerthaInnes.Tests
                 new OrderStarted(7),
                 new MarchandisePartiallyReceived(2)
             };
-            var aggregate = new Order(events);
 
-            var domainEvents = aggregate.Decide(new TakeMarchandise(colisList.Take(2).ToList()));
+            var domainEvents = Order.Decide(new TakeMarchandise(colisList.Take(2).ToList()), events);
 
             Assert.Contains(domainEvents, e => e is MarchandiseReceived);
         }
@@ -115,9 +114,8 @@ namespace BerthaInnes.Tests
                 new OrderStarted(7),
                 new MarchandisePartiallyReceived(4)
             };
-            var aggregate = new Order(events);
 
-            var domainEvents = aggregate.Decide(new TakeMarchandise(colisList.Take(2).ToList()));
+            var domainEvents = Order.Decide(new TakeMarchandise(colisList.Take(2).ToList()), events);
 
             Assert.Contains(domainEvents, e => e is MarchandisePartiallyReceived);
         }
