@@ -22,7 +22,7 @@ namespace BerthaInnes.Tests
         [Fact]
         public void Given_OrderStarted_When_send_TakeMarchandise_Then_Raise_MarchandiseReceived()
         {
-            var events = new List<IDomainEvent> { new OrderStarted(new List<Colis>(), 0) };
+            var events = new List<IDomainEvent> { new OrderStarted(0) };
             var aggregate = new Order(events);
 
             var domainEvents = aggregate.Decide(new TakeMarchandise(new List<Colis>()));
@@ -64,7 +64,7 @@ namespace BerthaInnes.Tests
                 new Colis(),
                 new Colis()
             };
-            var events = new List<IDomainEvent> { new OrderStarted(colisList, 7) };
+            var events = new List<IDomainEvent> { new OrderStarted(7) };
             var aggregate = new Order(events);
 
             var domainEvents = aggregate.Decide(new TakeMarchandise(colisList.Take(5).ToList()));
@@ -87,8 +87,8 @@ namespace BerthaInnes.Tests
             };
             var events = new List<IDomainEvent>
             {
-                new OrderStarted(colisList,7),
-                new MarchandisePartiallyReceived(colisList.Take(5).ToList(),2)
+                new OrderStarted(7),
+                new MarchandisePartiallyReceived(2)
             };
             var aggregate = new Order(events);
 
@@ -112,8 +112,8 @@ namespace BerthaInnes.Tests
             };
             var events = new List<IDomainEvent>
             {
-                new OrderStarted(colisList,7),
-                new MarchandisePartiallyReceived(colisList.Take(3).ToList(),4)
+                new OrderStarted(7),
+                new MarchandisePartiallyReceived(4)
             };
             var aggregate = new Order(events);
 

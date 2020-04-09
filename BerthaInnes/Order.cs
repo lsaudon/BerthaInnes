@@ -30,7 +30,7 @@ namespace BerthaInnes
 
         private List<IDomainEvent> Decide(StartOrder startOrder)
         {
-            return new List<IDomainEvent> { new OrderStarted(startOrder.ColisList, startOrder.ColisList.Count) };
+            return new List<IDomainEvent> { new OrderStarted(startOrder.ColisList.Count) };
         }
 
         private List<IDomainEvent> Decide(TakeMarchandise takeMarchandise)
@@ -44,7 +44,7 @@ namespace BerthaInnes
                 var numberColisRemaining = _decisionProjection.NumberColisRemaining - takeMarchandise.ColisList.Count;
                 return new List<IDomainEvent>
                 {
-                    new MarchandisePartiallyReceived(takeMarchandise.ColisList, numberColisRemaining)
+                    new MarchandisePartiallyReceived(numberColisRemaining)
                 };
             }
 
