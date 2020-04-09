@@ -11,7 +11,7 @@ namespace BerthaInnes.Tests
         [Fact]
         public void When_StartOrder_Then_raise_OrderStarted()
         {
-            var aggregate = new Order();
+            var aggregate = new Order(new List<DomainEvent>());
 
             var domainEvents = aggregate.Decide(new StartOrder(new List<Colis>()));
 
@@ -20,31 +20,30 @@ namespace BerthaInnes.Tests
         }
 
         [Fact]
-        public void Given_OrderStarted_When_send_TakeMarchandise_Then_raise_MarchandiseReceived()
+        public void Given_OrderStarted_When_send_TakeMarchandise_Then_Raise_MarchandiseReceived()
         {
-            var aggregate = new Order();
-            aggregate.Decide(new StartOrder(new List<Colis>()));
+            var events = new List<DomainEvent> { new OrderStarted(new List<Colis>(), 0) };
+            var aggregate = new Order(events);
 
             var domainEvents = aggregate.Decide(new TakeMarchandise(new List<Colis>()));
 
-            var domainEvent = domainEvents.Last();
-            Assert.Equal(typeof(MarchandiseReceived), domainEvent.GetType());
+            Assert.Contains(domainEvents, e => e is MarchandiseReceived);
         }
 
         [Fact]
-        public void When_send_TakeMarchandise_Then_raise_MarchandiseReceived()
+        public void When_Send_TakeMarchandise_Then_Raise_MarchandiseReceived()
         {
-            var aggregate = new Order();
+            var aggregate = new Order(new List<DomainEvent>());
 
             var domainEvents = aggregate.Decide(new TakeMarchandise(new List<Colis>()));
 
-            Assert.Empty(collection: domainEvents);
+            Assert.Empty(domainEvents);
         }
 
         [Fact]
-        public void Given_OrderWithMarchandiseReceived_When_TakeMarchandise_Then_raise_Nothing()
+        public void Given_OrderWithMarchandiseReceived_When_TakeMarchandise_Then_Raise_Nothing()
         {
-            var aggregate = new Order();
+            var aggregate = new Order(new List<DomainEvent>());
             aggregate.Decide(new StartOrder(new List<Colis>()));
             aggregate.Decide(new TakeMarchandise(new List<Colis>()));
 
@@ -53,9 +52,8 @@ namespace BerthaInnes.Tests
         }
 
         [Fact]
-        public void Given_OrderStartedOf7Colis_When_TakeMarchandiseWith5Colis_Then_raise_MarchandisePartiallyReceived()
+        public void Given_OrderStartedOf7Colis_When_TakeMarchandiseWith5Colis_Then_Raise_MarchandisePartiallyReceived()
         {
-            var aggregate = new Order();
             var colisList = new List<Colis>
             {
                 new Colis(),
@@ -66,7 +64,8 @@ namespace BerthaInnes.Tests
                 new Colis(),
                 new Colis()
             };
-            aggregate.Decide(new StartOrder(colisList));
+            var events = new List<DomainEvent> { new OrderStarted(colisList, 7) };
+            var aggregate = new Order(events);
 
             var domainEvents = aggregate.Decide(new TakeMarchandise(colisList.Take(5).ToList()));
 
@@ -76,7 +75,6 @@ namespace BerthaInnes.Tests
         [Fact]
         public void Given_OrderOf7Colis_With_5ColisReceived_When_TakeMarchandiseWith2Colis_Then_Raise_MarchandiseReceived()
         {
-            var aggregate = new Order();
             var colisList = new List<Colis>
             {
                 new Colis(),
@@ -87,12 +85,41 @@ namespace BerthaInnes.Tests
                 new Colis(),
                 new Colis()
             };
-            aggregate.Decide(new StartOrder(colisList));
-            aggregate.Decide(new TakeMarchandise(colisList.Take(5).ToList()));
+            var events = new List<DomainEvent>
+            {
+                new OrderStarted(colisList,7),
+                new MarchandisePartiallyReceived(colisList.Take(5).ToList(),2)
+            };
+            var aggregate = new Order(events);
 
             var domainEvents = aggregate.Decide(new TakeMarchandise(colisList.Take(2).ToList()));
 
             Assert.Contains(domainEvents, e => e is MarchandiseReceived);
+        }
+
+        [Fact]
+        public void Given_OrderStartedOf7Colis_With_3ColisReceived_When_TakeMarchandise_With_2Colis_Then_Raise_MarchandisePartiallyReceived()
+        {
+            var colisList = new List<Colis>
+            {
+                new Colis(),
+                new Colis(),
+                new Colis(),
+                new Colis(),
+                new Colis(),
+                new Colis(),
+                new Colis()
+            };
+            var events = new List<DomainEvent>
+            {
+                new OrderStarted(colisList,7),
+                new MarchandisePartiallyReceived(colisList.Take(3).ToList(),4)
+            };
+            var aggregate = new Order(events);
+
+            var domainEvents = aggregate.Decide(new TakeMarchandise(colisList.Take(2).ToList()));
+
+            Assert.Contains(domainEvents, e => e is MarchandisePartiallyReceived);
         }
     }
 }

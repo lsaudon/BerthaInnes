@@ -6,52 +6,96 @@ namespace BerthaInnes
 {
     public class Order
     {
-        private DecisionProjection _decisionProjection;
+        private readonly DecisionProjection _decisionProjection;
+
+        public Order(IEnumerable<DomainEvent> domainEvents)
+        {
+            _decisionProjection = new DecisionProjection();
+            HydrateProjection(domainEvents);
+        }
 
         public List<DomainEvent> Decide(DomainCommand command)
         {
-            return command switch
+            var domainEvents = command switch
             {
-                StartOrder startOrder => DecideForStartOrder(startOrder),
-                TakeMarchandise takeMarchandise => DecideForTakeMarchandise(takeMarchandise),
+                StartOrder startOrder => Decide(startOrder),
+                TakeMarchandise takeMarchandise => Decide(takeMarchandise),
                 _ => new List<DomainEvent>()
             };
+
+            HydrateProjection(domainEvents);
+
+            return domainEvents;
         }
 
-        private List<DomainEvent> DecideForStartOrder(StartOrder startOrder)
+        private List<DomainEvent> Decide(StartOrder startOrder)
         {
-            _decisionProjection.IsStarted = true;
-            _decisionProjection.ColisNumber = startOrder.ColisList.Count;
-            return new List<DomainEvent> { new OrderStarted() };
+            return new List<DomainEvent> { new OrderStarted(startOrder.ColisList, startOrder.ColisList.Count) };
         }
 
-        private List<DomainEvent> DecideForTakeMarchandise(TakeMarchandise takeMarchandise)
+        private List<DomainEvent> Decide(TakeMarchandise takeMarchandise)
         {
-            if (_decisionProjection.IsMarchandiseReceived)
+            if (_decisionProjection.IsMarchandiseReceived) return new List<DomainEvent>();
+
+            if (!_decisionProjection.IsStarted) return new List<DomainEvent>();
+
+            if (_decisionProjection.NumberColisRemaining > takeMarchandise.ColisList.Count)
             {
-                return new List<DomainEvent>();
+                var numberColisRemaining = _decisionProjection.NumberColisRemaining - takeMarchandise.ColisList.Count;
+                return new List<DomainEvent>
+                {
+                    new MarchandisePartiallyReceived(takeMarchandise.ColisList, numberColisRemaining)
+                };
             }
 
-            if (!_decisionProjection.IsStarted)
-            {
-                return new List<DomainEvent>();
-            }
-
-            if (_decisionProjection.ColisNumber > takeMarchandise.ColisList.Count)
-            {
-                _decisionProjection.ColisNumber -= takeMarchandise.ColisList.Count;
-                return new List<DomainEvent> { new MarchandisePartiallyReceived() };
-            }
-
-            _decisionProjection.IsMarchandiseReceived = true;
             return new List<DomainEvent> { new MarchandiseReceived() };
         }
 
-        private struct DecisionProjection
+        private void HydrateProjection(IEnumerable<DomainEvent> domainEvents)
         {
-            public bool IsStarted { get; set; }
-            public bool IsMarchandiseReceived { get; set; }
-            public int ColisNumber { get; set; }
+            foreach (var domainEvent in domainEvents)
+            {
+                _decisionProjection.Apply(domainEvent);
+            }
+        }
+
+        private class DecisionProjection
+        {
+            public bool IsStarted { get; private set; }
+            public bool IsMarchandiseReceived { get; private set; }
+            public int NumberColisRemaining { get; private set; }
+
+            public void Apply(DomainEvent domainEvent)
+            {
+                switch (domainEvent)
+                {
+                    case OrderStarted orderStarted:
+                        Apply(orderStarted);
+                        break;
+                    case MarchandisePartiallyReceived marchandisePartiallyReceived:
+                        Apply(marchandisePartiallyReceived);
+                        break;
+                    case MarchandiseReceived marchandiseReceived:
+                        Apply(marchandiseReceived);
+                        break;
+                }
+            }
+
+            private void Apply(OrderStarted orderStarted)
+            {
+                IsStarted = true;
+                NumberColisRemaining = orderStarted.NumberColis;
+            }
+
+            private void Apply(MarchandisePartiallyReceived marchandisePartiallyReceived)
+            {
+                NumberColisRemaining = marchandisePartiallyReceived.NumberColisRemaining;
+            }
+
+            private void Apply(MarchandiseReceived marchandiseReceived)
+            {
+                IsMarchandiseReceived = true;
+            }
         }
     }
 }
