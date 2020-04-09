@@ -4,7 +4,7 @@ using Xunit;
 
 namespace BerthaInnes.Tests
 {
-    public class UnitTest1
+    public class OrderTests
     {
         [Fact]
         public void When_StartOrder_Then_raise_OrderStarted()
