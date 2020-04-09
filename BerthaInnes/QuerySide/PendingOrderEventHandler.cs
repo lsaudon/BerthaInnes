@@ -18,13 +18,13 @@ namespace BerthaInnes.QuerySide
             {
                 case OrderStarted _:
                     {
-                        var waitingOrder = new WaitingOrder(evt.AggregateId);
+                        var waitingOrder = new WaitingOrder(evt.OrderId);
                         _repository.Add(waitingOrder);
                         break;
                     }
                 case MarchandiseReceived _:
                     {
-                        _repository.RemoveAll(w => w.Id == evt.AggregateId);
+                        _repository.RemoveAll(w => w.Id == evt.OrderId);
                         break;
                     }
             }

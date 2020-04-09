@@ -4,13 +4,13 @@ namespace BerthaInnes.QuerySide
 {
     public class EventWrapper
     {
-        public EventWrapper(string aggregateId, IDomainEvent domainEvent)
+        public EventWrapper(string orderId, IDomainEvent domainEvent)
         {
-            AggregateId = aggregateId;
+            OrderId = orderId;
             DomainEvent = domainEvent;
         }
 
-        public string AggregateId { get; }
+        public string OrderId { get; }
         public IDomainEvent DomainEvent { get; }
     }
 }
