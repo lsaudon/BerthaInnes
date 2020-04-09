@@ -1,4 +1,4 @@
-﻿namespace BerthaInnes
+﻿namespace BerthaInnes.CommandSide
 {
     public class Colis
     {

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace BerthaInnes.DomainCommands
+namespace BerthaInnes.CommandSide.DomainCommands
 {
-    public struct StartOrder : IDomainCommand
+    public struct TakeMarchandise : IDomainCommand
     {
         public List<Colis> ColisList { get; }
 
-        public StartOrder(List<Colis> colisList)
+        public TakeMarchandise(List<Colis> colisList)
         {
             ColisList = colisList;
         }
