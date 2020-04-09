@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using BerthaInnes.DomainCommands;
-using BerthaInnes.DomainEvents;
+using BerthaInnes.CommandSide;
+using BerthaInnes.CommandSide.DomainCommands;
+using BerthaInnes.CommandSide.DomainEvents;
 using Xunit;
 
-namespace BerthaInnes.Tests
+namespace BerthaInnes.Tests.CommandSide
 {
     public class OrderTests
     {

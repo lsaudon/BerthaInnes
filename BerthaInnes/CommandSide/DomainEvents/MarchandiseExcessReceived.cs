@@ -1,4 +1,4 @@
-﻿namespace BerthaInnes.DomainEvents
+﻿namespace BerthaInnes.CommandSide.DomainEvents
 {
     public struct MarchandiseExcessReceived : IDomainEvent
     {

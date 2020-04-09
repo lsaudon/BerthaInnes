@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BerthaInnes.DomainCommands
+namespace BerthaInnes.CommandSide.DomainCommands
 {
     public struct StartOrder : IDomainCommand
     {
