@@ -1,4 +1,12 @@
 ﻿namespace BerthaInnes.DomainEvents
 {
-    public struct MarchandiseReceived : IDomainEvent { }
+    public struct MarchandiseReceived : IDomainEvent
+    {
+        public int NumberColisRemaining { get; }
+
+        public MarchandiseReceived(int numberColisRemaining)
+        {
+            NumberColisRemaining = numberColisRemaining;
+        }
+    }
 }

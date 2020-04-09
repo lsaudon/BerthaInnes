@@ -46,7 +46,17 @@ namespace BerthaInnes
                 };
             }
 
-            return new List<IDomainEvent> { new MarchandiseReceived() };
+            if (decisionProjection.NumberColisRemaining < takeMarchandise.ColisList.Count)
+            {
+                var numberColisExcess = takeMarchandise.ColisList.Count - decisionProjection.NumberColisRemaining;
+                return new List<IDomainEvent>
+                {
+                    new MarchandiseReceived(decisionProjection.NumberColisRemaining),
+                    new MarchandiseExcessReceived(numberColisExcess)
+                };
+            }
+
+            return new List<IDomainEvent> { new MarchandiseReceived(0) };
         }
 
         private class DecisionProjection
@@ -85,6 +95,7 @@ namespace BerthaInnes
             private void Apply(MarchandiseReceived marchandiseReceived)
             {
                 IsMarchandiseReceived = true;
+                NumberColisRemaining = marchandiseReceived.NumberColisRemaining;
             }
         }
     }
