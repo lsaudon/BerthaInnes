@@ -9,38 +9,38 @@ namespace BerthaInnes
     {
         private readonly List<DomainEvent> _domainEvents = new List<DomainEvent>();
 
-        public DomainEvent Decide(DomainCommand command)
+        public List<DomainEvent> Decide(DomainCommand command)
         {
             return command switch
             {
                 StartOrder _ => DecideForStartOrder(),
                 TakeMarchandise _ => DecideForTakeMarchandise(),
-                _ => new Nothing()
+                _ => new List<DomainEvent>()
             };
         }
 
-        private DomainEvent DecideForStartOrder()
+        private List<DomainEvent> DecideForStartOrder()
         {
             var orderStarted = new OrderStarted();
             _domainEvents.Add(orderStarted);
-            return orderStarted;
+            return new List<DomainEvent> { orderStarted };
         }
 
-        private DomainEvent DecideForTakeMarchandise()
+        private List<DomainEvent> DecideForTakeMarchandise()
         {
-            if (_domainEvents.Any(domainEvent => domainEvent.GetType() == typeof(MarchandiseReceived)))
+            if (_domainEvents.Any(domainEvent => domainEvent is MarchandiseReceived))
             {
-                return new Nothing();
+                return new List<DomainEvent>();
             }
 
             if (_domainEvents.All(domainEvent => domainEvent.GetType() != typeof(OrderStarted)))
             {
-                return new Nothing();
+                return new List<DomainEvent>();
             }
 
             var marchandiseReceived = new MarchandiseReceived();
             _domainEvents.Add(marchandiseReceived);
-            return marchandiseReceived;
+            return new List<DomainEvent> { marchandiseReceived };
         }
     }
 }

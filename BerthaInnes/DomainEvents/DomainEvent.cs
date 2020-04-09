@@ -1,4 +1,4 @@
 ﻿namespace BerthaInnes.DomainEvents
 {
-    public class DomainEvent { }
+    public interface DomainEvent { }
 }

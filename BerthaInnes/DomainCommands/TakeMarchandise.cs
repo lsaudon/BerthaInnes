@@ -1,4 +1,4 @@
 ﻿namespace BerthaInnes.DomainCommands
 {
-    public class TakeMarchandise : DomainCommand { }
+    public struct TakeMarchandise : DomainCommand { }
 }

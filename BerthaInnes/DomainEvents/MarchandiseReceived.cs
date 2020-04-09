@@ -1,4 +1,5 @@
 ﻿namespace BerthaInnes.DomainEvents
 {
-    public class MarchandiseReceived : DomainEvent { }
+    public struct MarchandiseReceived : DomainEvent { }
+    public struct MarchandisePartiallyReceived : DomainEvent { }
 }
