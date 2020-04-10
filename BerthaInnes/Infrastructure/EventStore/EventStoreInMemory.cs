@@ -14,6 +14,11 @@ namespace BerthaInnes.Infrastructure.EventStore
             return _eventsWrappers.Where(e => e.AggregateId == aggregateId).SelectMany(e => e.DomainEvents).ToList();
         }
 
+        public void Clear(string aggregateId)
+        {
+            _eventsWrappers.RemoveAll(e => e.AggregateId == aggregateId);
+        }
+
         public void Add(EventsWrapper eventsWrapper)
         {
             var sequenceId = GetSequenceId(eventsWrapper.AggregateId);

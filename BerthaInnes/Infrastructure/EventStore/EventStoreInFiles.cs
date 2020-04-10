@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ namespace BerthaInnes.Infrastructure.EventStore
     public class EventStoreInFiles : IEventStore
     {
         private const string _folder = "EventStore";
+        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
         public EventStoreInFiles()
         {
@@ -21,12 +23,11 @@ namespace BerthaInnes.Infrastructure.EventStore
             var domainEvents = new List<IDomainEvent>();
             foreach (var line in file)
             {
-                var jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
-                var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(line, jsonSerializerSettings);
-                if (domainEvent != null)
-                {
-                    domainEvents.Add(domainEvent);
-                }
+                var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(line, _jsonSerializerSettings);
+
+                if (domainEvent == null) continue;
+
+                domainEvents.Add(domainEvent);
             }
             return domainEvents;
         }
@@ -41,25 +42,20 @@ namespace BerthaInnes.Infrastructure.EventStore
             var sequenceId = GetSequenceId(eventsWrapper.AggregateId);
             if (sequenceId >= eventsWrapper.SequenceId) throw new SequenceAlreadyStoredException();
 
-            foreach (var domainEvent in eventsWrapper.DomainEvents)
-            {
-                var jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
-                var serialize = JsonConvert.SerializeObject(domainEvent, jsonSerializerSettings);
-                File.AppendAllText(GetFileName(eventsWrapper.AggregateId), serialize + "\n");
-            }
+            var lines = eventsWrapper.DomainEvents
+                .Select(domainEvent => JsonConvert.SerializeObject(domainEvent, _jsonSerializerSettings));
+
+            File.AppendAllLines(GetFileName(eventsWrapper.AggregateId), lines);
         }
 
         public int GetSequenceId(string aggregateId)
         {
-            if (File.Exists(GetFileName(aggregateId)))
-            {
-                return File.ReadAllLines(GetFileName(aggregateId)).Length;
-            }
-
-            return 0;
+            return File.Exists(GetFileName(aggregateId)) 
+                ? File.ReadAllLines(GetFileName(aggregateId)).Length 
+                : 0;
         }
 
-        private string GetFileName(string aggregateId)
+        private static string GetFileName(string aggregateId)
         {
             return @$"{_folder}\{aggregateId}.txt";
         }
