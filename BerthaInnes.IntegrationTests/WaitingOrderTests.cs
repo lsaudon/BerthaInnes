@@ -18,7 +18,7 @@ namespace BerthaInnes.IntegrationTests
             var eventHandlers = new List<IEventHandler> { pendingOrderEventHandler };
 
             var eventStore = new List<EventWrapper>();
-            var pubSub = new PubSub(eventStore,eventHandlers);
+            var pubSub = new PubSub(eventStore, eventHandlers);
 
             var colisList = new List<Colis> { new Colis() };
 
@@ -26,12 +26,12 @@ namespace BerthaInnes.IntegrationTests
 
             foreach (var domainEvent in domainEvents)
             {
-                pubSub.Publish(new EventWrapper("1",domainEvent));
+                pubSub.Publish(new EventWrapper("1", domainEvent));
             }
-            
+
             Assert.Single(repository);
-            Assert.Equal("1",repository.First().Id);
-            Assert.Equal(1,repository.First().NumberColis);
+            Assert.Equal("1", repository.First().Id);
+            Assert.Equal(1, repository.First().NumberColis);
         }
     }
 }
