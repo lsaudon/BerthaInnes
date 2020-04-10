@@ -1,6 +1,6 @@
-﻿using BerthaInnes.CommandSide.DomainEvents;
+﻿using BerthaInnes.Domain.CommandSide.DomainEvents;
 
-namespace BerthaInnes.QuerySide
+namespace BerthaInnes.Domain.QuerySide
 {
     public struct EventWrapper
     {

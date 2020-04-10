@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using BerthaInnes.CommandSide.DomainCommands;
-using BerthaInnes.CommandSide.DomainEvents;
+using BerthaInnes.Domain.CommandSide.DomainCommands;
+using BerthaInnes.Domain.CommandSide.DomainEvents;
 
-namespace BerthaInnes.CommandSide
+namespace BerthaInnes.Domain.CommandSide
 {
     public class Order
     {

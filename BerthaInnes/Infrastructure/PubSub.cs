@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using BerthaInnes.QuerySide;
+using BerthaInnes.Domain.QuerySide;
 
-namespace BerthaInnes
+namespace BerthaInnes.Infrastructure
 {
     public class PubSub
     {

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using BerthaInnes.CommandSide;
-using BerthaInnes.CommandSide.DomainCommands;
-using BerthaInnes.CommandSide.DomainEvents;
+using BerthaInnes.Domain.CommandSide;
+using BerthaInnes.Domain.CommandSide.DomainCommands;
+using BerthaInnes.Domain.CommandSide.DomainEvents;
 using Xunit;
 
 namespace BerthaInnes.Tests.CommandSide

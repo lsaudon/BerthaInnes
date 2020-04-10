@@ -1,4 +1,4 @@
-﻿namespace BerthaInnes.QuerySide
+﻿namespace BerthaInnes.Domain.QuerySide
 {
     public struct WaitingOrder
     {

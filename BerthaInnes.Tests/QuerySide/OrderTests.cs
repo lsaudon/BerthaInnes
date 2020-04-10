@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using BerthaInnes.CommandSide.DomainEvents;
-using BerthaInnes.QuerySide;
+using BerthaInnes.Domain.CommandSide.DomainEvents;
+using BerthaInnes.Domain.QuerySide;
 using Xunit;
 
 namespace BerthaInnes.Tests.QuerySide

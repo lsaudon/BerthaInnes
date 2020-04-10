@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using BerthaInnes.CommandSide;
-using BerthaInnes.CommandSide.DomainCommands;
-using BerthaInnes.CommandSide.DomainEvents;
-using BerthaInnes.QuerySide;
+using BerthaInnes.Domain.CommandSide;
+using BerthaInnes.Domain.CommandSide.DomainCommands;
+using BerthaInnes.Domain.QuerySide;
+using BerthaInnes.Infrastructure;
 using Xunit;
 
 namespace BerthaInnes.IntegrationTests
@@ -22,12 +22,8 @@ namespace BerthaInnes.IntegrationTests
 
             var colisList = new List<Colis> { new Colis() };
 
-            var domainEvents = Order.Decide(new StartOrder(colisList), new List<IDomainEvent>()).ToList();
-
-            foreach (var domainEvent in domainEvents)
-            {
-                pubSub.Publish(new EventWrapper("1", domainEvent));
-            }
+            var commandHandler = new CommandHandler(pubSub);
+            commandHandler.Handle(new StartOrder(colisList));
 
             Assert.Single(repository);
             Assert.Equal("1", repository.First().Id);
