@@ -3,7 +3,7 @@ using BerthaInnes.CommandSide.DomainEvents;
 
 namespace BerthaInnes.QuerySide
 {
-    public class PendingOrderEventHandler
+    public class PendingOrderEventHandler : IEventHandler
     {
         private readonly List<WaitingOrder> _repository;
 

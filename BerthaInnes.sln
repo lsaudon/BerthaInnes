@@ -10,7 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BerthaInnes", "BerthaInnes\BerthaInnes.csproj", "{F933298A-34F3-4CFB-B1DE-37074F8E6D1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BerthaInnes.Tests", "BerthaInnes.Tests\BerthaInnes.Tests.csproj", "{D7A500B7-BBBC-4A13-83F2-B3A7C4423E5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BerthaInnes.Tests", "BerthaInnes.Tests\BerthaInnes.Tests.csproj", "{D7A500B7-BBBC-4A13-83F2-B3A7C4423E5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BerthaInnes.IntegrationTests", "BerthaInnes.IntegrationTests\BerthaInnes.IntegrationTests.csproj", "{9076BE33-7080-4461-ACC5-471F77F54565}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{D7A500B7-BBBC-4A13-83F2-B3A7C4423E5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7A500B7-BBBC-4A13-83F2-B3A7C4423E5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7A500B7-BBBC-4A13-83F2-B3A7C4423E5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9076BE33-7080-4461-ACC5-471F77F54565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9076BE33-7080-4461-ACC5-471F77F54565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9076BE33-7080-4461-ACC5-471F77F54565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9076BE33-7080-4461-ACC5-471F77F54565}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

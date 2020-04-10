@@ -2,7 +2,7 @@
 
 namespace BerthaInnes.QuerySide
 {
-    public class EventWrapper
+    public struct EventWrapper
     {
         public EventWrapper(string orderId, IDomainEvent domainEvent)
         {
