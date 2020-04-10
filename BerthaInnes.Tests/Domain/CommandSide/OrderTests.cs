@@ -5,7 +5,7 @@ using BerthaInnes.Domain.CommandSide.DomainCommands;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
 using Xunit;
 
-namespace BerthaInnes.Tests.CommandSide
+namespace BerthaInnes.Tests.Domain.CommandSide
 {
     public class OrderTests
     {

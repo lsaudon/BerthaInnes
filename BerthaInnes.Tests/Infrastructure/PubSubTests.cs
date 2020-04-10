@@ -4,7 +4,7 @@ using BerthaInnes.Domain.QuerySide;
 using BerthaInnes.Infrastructure;
 using Xunit;
 
-namespace BerthaInnes.Tests
+namespace BerthaInnes.Tests.Infrastructure
 {
     public class PubSubTests
     {

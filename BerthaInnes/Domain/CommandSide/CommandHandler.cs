@@ -4,6 +4,7 @@ using BerthaInnes.Domain.CommandSide.DomainCommands;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
 using BerthaInnes.Infrastructure;
+using BerthaInnes.Infrastructure.EventStore;
 
 namespace BerthaInnes.Domain.CommandSide
 {

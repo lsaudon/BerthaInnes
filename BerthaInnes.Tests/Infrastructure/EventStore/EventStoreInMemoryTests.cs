@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
-using BerthaInnes.Infrastructure;
+using BerthaInnes.Infrastructure.EventStore;
 using Xunit;
 
-namespace BerthaInnes.Tests
+namespace BerthaInnes.Tests.Infrastructure.EventStore
 {
     public class EventStoreInMemoryTests
     {

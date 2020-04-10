@@ -3,7 +3,7 @@ using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
 using Xunit;
 
-namespace BerthaInnes.Tests.QuerySide
+namespace BerthaInnes.Tests.Domain.QuerySide
 {
     public class OrderTests
     {

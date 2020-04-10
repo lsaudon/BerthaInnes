@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BerthaInnes.Domain.QuerySide;
 
-namespace BerthaInnes.Infrastructure
+namespace BerthaInnes.Infrastructure.EventStore
 {
-    public interface IEventStore
-    {
-        List<EventsWrapper> GetAll(string aggregateId);
-        void Add(EventsWrapper eventsWrapper);
-        int GetSequenceId(string aggregateId);
-    }
-
     public class EventStoreInMemory : IEventStore
     {
         private readonly List<EventsWrapper> _eventWrappers = new List<EventsWrapper>();
@@ -33,9 +25,5 @@ namespace BerthaInnes.Infrastructure
         {
             return _eventWrappers.Where(e => e.OrderId == aggregateId).ToList().Count;
         }
-    }
-
-    public class SequenceAlreadyStoredException : Exception
-    {
     }
 }
