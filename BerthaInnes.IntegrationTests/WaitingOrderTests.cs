@@ -17,12 +17,13 @@ namespace BerthaInnes.IntegrationTests
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
             var eventHandlers = new List<IEventHandler> { pendingOrderEventHandler };
 
-            var eventStore = new List<EventWrapper>();
-            var pubSub = new PubSub(eventStore, eventHandlers);
+            var eventStoreLegacy = new List<EventsWrapper>();
+            var eventStore = new EventStoreInMemory();
+            var pubSub = new PubSub(eventStoreLegacy, eventHandlers);
 
             var colisList = new List<Colis> { new Colis() };
 
-            var commandHandler = new CommandHandler(pubSub);
+            var commandHandler = new CommandHandler(pubSub,eventStore);
             commandHandler.Handle(new StartOrder(colisList));
 
             Assert.Single(repository);

@@ -15,20 +15,22 @@ namespace BerthaInnes.Domain.CommandSide
     public class CommandHandler : ICommandHandler
     {
         private readonly PubSub _pubSub;
+        private readonly IEventStore _eventStoreInMemory;
 
-        public CommandHandler(PubSub pubSub)
+        public CommandHandler(PubSub pubSub, IEventStore eventStoreInMemory)
         {
             _pubSub = pubSub;
+            _eventStoreInMemory = eventStoreInMemory;
         }
 
         public void Handle(IDomainCommand domainCommand)
         {
             var domainEvents = Order.Decide(domainCommand, new List<IDomainEvent>()).ToList();
 
-            foreach (var domainEvent in domainEvents)
-            {
-                _pubSub.Publish(new EventWrapper("1", domainEvent));
-            }
+            var orderId = "1";
+            var sequenceId = _eventStoreInMemory.GetSequenceId(orderId);
+
+            _pubSub.Publish(new EventsWrapper(orderId, domainEvents,sequenceId));
         }
     }
 }

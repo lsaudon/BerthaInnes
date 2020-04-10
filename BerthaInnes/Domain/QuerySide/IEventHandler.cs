@@ -2,6 +2,6 @@
 {
     public interface IEventHandler
     {
-        void Handle(EventWrapper evt);
+        void Handle(EventsWrapper evt);
     }
 }

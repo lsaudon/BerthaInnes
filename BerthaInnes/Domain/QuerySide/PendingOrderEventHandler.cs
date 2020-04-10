@@ -12,22 +12,25 @@ namespace BerthaInnes.Domain.QuerySide
             _repository = repository;
         }
 
-        public void Handle(EventWrapper evt)
+        public void Handle(EventsWrapper evt)
         {
-            switch (evt.DomainEvent)
+            foreach (var domainEvent in evt.DomainEvents)
             {
-                case OrderStarted orderStarted:
+                switch (domainEvent)
+                {
+                    case OrderStarted orderStarted:
                     {
 
                         var waitingOrder = new WaitingOrder(evt.OrderId, orderStarted.NumberColis);
                         _repository.Add(waitingOrder);
                         break;
                     }
-                case MarchandiseReceived _:
+                    case MarchandiseReceived _:
                     {
                         _repository.RemoveAll(w => w.Id == evt.OrderId);
                         break;
                     }
+                }
             }
         }
     }

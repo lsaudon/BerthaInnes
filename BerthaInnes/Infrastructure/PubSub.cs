@@ -5,21 +5,21 @@ namespace BerthaInnes.Infrastructure
 {
     public class PubSub
     {
-        private readonly List<EventWrapper> _eventStore;
+        private readonly List<EventsWrapper> _eventStore;
         private readonly List<IEventHandler> _eventHandlers;
 
-        public PubSub(List<EventWrapper> eventStore, List<IEventHandler> eventHandlers)
+        public PubSub(List<EventsWrapper> eventStore, List<IEventHandler> eventHandlers)
         {
             _eventStore = eventStore;
             _eventHandlers = eventHandlers;
         }
 
-        public void Publish(EventWrapper eventWrapper)
+        public void Publish(EventsWrapper eventsWrapper)
         {
-            _eventStore.Add(eventWrapper);
+            _eventStore.Add(eventsWrapper);
             foreach (var eventHandler in _eventHandlers)
             {
-                eventHandler.Handle(eventWrapper);
+                eventHandler.Handle(eventsWrapper);
             }
         }
     }

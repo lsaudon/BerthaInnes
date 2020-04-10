@@ -11,12 +11,13 @@ namespace BerthaInnes.Tests
         [Fact]
         public void Should_Store_Events_When_Publish_Event()
         {
-            var eventStore = new List<EventWrapper>();
+            var eventStore = new List<EventsWrapper>();
             var pubSub = new PubSub(eventStore, new List<IEventHandler>());
 
-            pubSub.Publish(new EventWrapper("1", new OrderStarted(1)));
+            var domainEvents = new List<IDomainEvent> { new OrderStarted(1) };
+            pubSub.Publish(new EventsWrapper("1", domainEvents, 1));
 
-            Assert.Contains(new EventWrapper("1", new OrderStarted(1)), eventStore);
+            Assert.Contains(new EventsWrapper("1", domainEvents, 1), eventStore);
         }
 
         [Fact]
@@ -27,10 +28,11 @@ namespace BerthaInnes.Tests
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
             var eventHandlers = new List<IEventHandler> { pendingOrderEventHandler };
 
-            var eventStore = new List<EventWrapper>();
+            var eventStore = new List<EventsWrapper>();
             var pubSub = new PubSub(eventStore, eventHandlers);
 
-            pubSub.Publish(new EventWrapper("1", new OrderStarted(1)));
+            var domainEvents = new List<IDomainEvent> { new OrderStarted(1) };
+            pubSub.Publish(new EventsWrapper("1", domainEvents, 1));
 
             Assert.Single(repository);
         }
