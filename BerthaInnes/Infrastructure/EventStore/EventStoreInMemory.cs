@@ -1,29 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
 
 namespace BerthaInnes.Infrastructure.EventStore
 {
     public class EventStoreInMemory : IEventStore
     {
-        private readonly List<EventsWrapper> _eventWrappers = new List<EventsWrapper>();
+        private readonly List<EventsWrapper> _eventsWrappers = new List<EventsWrapper>();
 
-        public List<EventsWrapper> GetAll(string aggregateId)
+        public List<IDomainEvent> GetAll(string aggregateId)
         {
-            return _eventWrappers.Where(e => e.OrderId == aggregateId).ToList();
+            return _eventsWrappers.Where(e => e.AggregateId == aggregateId).SelectMany(e => e.DomainEvents).ToList();
         }
 
         public void Add(EventsWrapper eventsWrapper)
         {
-            var sequenceId = GetSequenceId(eventsWrapper.OrderId);
+            var sequenceId = GetSequenceId(eventsWrapper.AggregateId);
             if (sequenceId >= eventsWrapper.SequenceId) throw new SequenceAlreadyStoredException();
 
-            _eventWrappers.Add(eventsWrapper);
+            _eventsWrappers.Add(eventsWrapper);
         }
 
         public int GetSequenceId(string aggregateId)
         {
-            return _eventWrappers.Where(e => e.OrderId == aggregateId).ToList().Count;
+            return _eventsWrappers.Where(e => e.AggregateId == aggregateId).ToList().Count;
         }
     }
 }

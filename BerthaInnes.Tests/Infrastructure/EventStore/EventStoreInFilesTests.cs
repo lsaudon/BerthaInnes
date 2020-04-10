@@ -20,6 +20,7 @@ namespace BerthaInnes.Tests.Infrastructure.EventStore
             var events = eventStore.GetAll("1");
 
             Assert.Equal(2, events.Count);
+            eventStore.Clear("1");
         }
 
         [Fact]
@@ -34,6 +35,8 @@ namespace BerthaInnes.Tests.Infrastructure.EventStore
             var events = eventStore.GetAll("1");
 
             Assert.Equal(2, events.Count);
+            eventStore.Clear("1");
+            eventStore.Clear("2");
         }
 
         [Fact]
@@ -46,6 +49,8 @@ namespace BerthaInnes.Tests.Infrastructure.EventStore
 
             Assert.Throws<SequenceAlreadyStoredException>(()
                 => eventStore.Add(new EventsWrapper("1", new List<IDomainEvent> { new MarchandiseReceived() }, 2)));
+
+            eventStore.Clear("1");
         }
     }
 }
