@@ -16,9 +16,10 @@ namespace BerthaInnes.QuerySide
         {
             switch (evt.DomainEvent)
             {
-                case OrderStarted _:
+                case OrderStarted orderStarted:
                     {
-                        var waitingOrder = new WaitingOrder(evt.OrderId);
+
+                        var waitingOrder = new WaitingOrder(evt.OrderId, orderStarted.NumberColis);
                         _repository.Add(waitingOrder);
                         break;
                     }

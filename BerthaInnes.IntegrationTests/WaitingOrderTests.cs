@@ -21,6 +21,7 @@ namespace BerthaInnes.IntegrationTests
             var pubSub = new PubSub(eventStore,eventHandlers);
 
             var colisList = new List<Colis> { new Colis() };
+
             var domainEvents = Order.Decide(new StartOrder(colisList), new List<IDomainEvent>()).ToList();
 
             foreach (var domainEvent in domainEvents)
@@ -29,6 +30,8 @@ namespace BerthaInnes.IntegrationTests
             }
             
             Assert.Single(repository);
+            Assert.Equal("1",repository.First().Id);
+            Assert.Equal(1,repository.First().NumberColis);
         }
     }
 }

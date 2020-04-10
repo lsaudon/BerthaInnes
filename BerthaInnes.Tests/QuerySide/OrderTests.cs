@@ -23,7 +23,7 @@ namespace BerthaInnes.Tests.QuerySide
         [Fact]
         public void When_Receive_MarchandiseReceived_Then_This_Order_Is_Removed_of_WaitingOrders()
         {
-            var repository = new List<WaitingOrder> { new WaitingOrder("1") };
+            var repository = new List<WaitingOrder> { new WaitingOrder("1",1) };
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
 
             var evt = new EventWrapper("1", new MarchandiseReceived(1));
@@ -36,7 +36,7 @@ namespace BerthaInnes.Tests.QuerySide
         [Fact]
         public void Given_2_WaitingOrders_A_and_B_When_Receive_MarchandiseReceived_Of_Order_B_Then_I_Have_Only_Order_A_In_Waiting_Orders()
         {
-            var repository = new List<WaitingOrder> { new WaitingOrder("A"), new WaitingOrder("B") };
+            var repository = new List<WaitingOrder> { new WaitingOrder("A",1), new WaitingOrder("B",1) };
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
 
             var evt = new EventWrapper("B", new MarchandiseReceived(0));
