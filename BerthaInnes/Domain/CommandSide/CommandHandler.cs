@@ -26,12 +26,12 @@ namespace BerthaInnes.Domain.CommandSide
 
         public void Handle(IDomainCommand domainCommand)
         {
-            var domainEvents = Order.Decide(domainCommand, new List<IDomainEvent>()).ToList();
-
             var orderId = "1";
-            var sequenceId = _eventStoreInMemory.GetSequenceId(orderId);
 
-            _pubSub.Publish(new EventsWrapper(orderId, domainEvents,sequenceId));
+            var stream = _eventStoreInMemory.GetAll(orderId);
+            var domainEvents = Order.Decide(domainCommand, stream).ToList();
+
+            _pubSub.Publish(new EventsWrapper(orderId, domainEvents, stream.Count));
         }
     }
 }
