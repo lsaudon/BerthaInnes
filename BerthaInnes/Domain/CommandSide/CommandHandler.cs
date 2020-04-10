@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using BerthaInnes.Domain.CommandSide.DomainCommands;
-using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
 using BerthaInnes.Infrastructure;
 using BerthaInnes.Infrastructure.EventStore;
