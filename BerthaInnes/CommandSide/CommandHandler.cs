@@ -1,17 +1,15 @@
 ﻿using System.Linq;
 using BerthaInnes.Domain.CommandSide.DomainCommands;
 using BerthaInnes.Domain.QuerySide;
-using BerthaInnes.Infrastructure;
-using BerthaInnes.Infrastructure.EventStore;
 
 namespace BerthaInnes.Domain.CommandSide
 {
     public class CommandHandler : ICommandHandler
     {
-        private readonly PubSub _pubSub;
+        private readonly IPubSub _pubSub;
         private readonly IEventStore _eventStoreInMemory;
 
-        public CommandHandler(PubSub pubSub, IEventStore eventStoreInMemory)
+        public CommandHandler(IPubSub pubSub, IEventStore eventStoreInMemory)
         {
             _pubSub = pubSub;
             _eventStoreInMemory = eventStoreInMemory;

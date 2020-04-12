@@ -2,10 +2,9 @@
 using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
-using BerthaInnes.Infrastructure;
 using Xunit;
 
-namespace BerthaInnes.Tests.Infrastructure
+namespace BerthaInnes.Infrastructure.Tests
 {
     public class PubSubTests
     {

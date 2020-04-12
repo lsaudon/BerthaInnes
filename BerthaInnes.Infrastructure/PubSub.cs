@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using BerthaInnes.Domain;
 using BerthaInnes.Domain.QuerySide;
 
 namespace BerthaInnes.Infrastructure
 {
-    public class PubSub
+    public class PubSub : IPubSub
     {
         private readonly List<EventsWrapper> _eventStore;
         private readonly List<IEventHandler> _eventHandlers;

@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace BerthaInnes.Tests.Infrastructure.EventStore
+namespace BerthaInnes.Infrastructure.Tests.EventStore
 {
     public class EventStoreInEventStoreTests
     {

@@ -3,7 +3,7 @@ using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
 
-namespace BerthaInnes.Infrastructure.EventStore
+namespace BerthaInnes.Domain
 {
     public interface IEventStore
     {
