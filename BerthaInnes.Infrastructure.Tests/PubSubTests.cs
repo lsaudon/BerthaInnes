@@ -14,7 +14,7 @@ namespace BerthaInnes.Infrastructure.Tests
             var eventStore = new List<EventsWrapper>();
             var pubSub = new PubSub(eventStore, new List<IEventHandler>());
 
-            var domainEvents = new List<IDomainEvent> { new OrderStarted(1) };
+            var domainEvents = new List<IDomainEvent> { new OrderStarted(new OrderId("1"),1) };
             pubSub.Publish(new EventsWrapper(new OrderId("1"), domainEvents, 1));
 
             Assert.Contains(new EventsWrapper(new OrderId("1"), domainEvents, 1), eventStore);
@@ -31,7 +31,7 @@ namespace BerthaInnes.Infrastructure.Tests
             var eventStore = new List<EventsWrapper>();
             var pubSub = new PubSub(eventStore, eventHandlers);
 
-            var domainEvents = new List<IDomainEvent> { new OrderStarted(1) };
+            var domainEvents = new List<IDomainEvent> { new OrderStarted(new OrderId("1"),1) };
             pubSub.Publish(new EventsWrapper(new OrderId("1"), domainEvents, 1));
 
             Assert.Single(repository);

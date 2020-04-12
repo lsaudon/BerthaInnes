@@ -3,13 +3,24 @@ using BerthaInnes.Domain.CommandSide.DomainEvents;
 
 namespace BerthaInnes.Domain.QuerySide
 {
-    public class PendingOrderEventHandler : IEventHandler
+    public class PendingOrderEventHandler : IEventHandler<OrderStarted>, IEventHandler<MarchandiseReceived>
     {
         private readonly List<WaitingOrder> _repository;
 
         public PendingOrderEventHandler(List<WaitingOrder> repository)
         {
             _repository = repository;
+        }
+
+        public void Handle(OrderStarted evt)
+        {
+            var waitingOrder = new WaitingOrder(evt.Id, evt.NumberColis);
+            _repository.Add(waitingOrder);
+        }
+
+        public void Handle(MarchandiseReceived evt)
+        {
+            _repository.RemoveAll(w => Equals(w.Id, evt.Id));
         }
 
         public void Handle(EventsWrapper evt)

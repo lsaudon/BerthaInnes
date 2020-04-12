@@ -14,7 +14,7 @@ namespace BerthaInnes.Domain.Tests.QuerySide
             var repository = new List<WaitingOrder>();
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
 
-            var domainEvents = new List<IDomainEvent> { new OrderStarted(1) };
+            var domainEvents = new List<IDomainEvent> { new OrderStarted(new OrderId("1"), 1) };
             var evt = new EventsWrapper(new OrderId("1"), domainEvents, 1);
 
             pendingOrderEventHandler.Handle(evt);
@@ -27,7 +27,7 @@ namespace BerthaInnes.Domain.Tests.QuerySide
         {
             var repository = new List<WaitingOrder> { new WaitingOrder(new OrderId("1"), 1) };
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
-            var domainEvents = new List<IDomainEvent> { new MarchandiseReceived(1) };
+            var domainEvents = new List<IDomainEvent> { new MarchandiseReceived(new OrderId("1"), 1) };
             var evt = new EventsWrapper(new OrderId("1"), domainEvents, 1);
 
             pendingOrderEventHandler.Handle(evt);
@@ -40,7 +40,7 @@ namespace BerthaInnes.Domain.Tests.QuerySide
         {
             var repository = new List<WaitingOrder> { new WaitingOrder(new OrderId("A"), 1), new WaitingOrder(new OrderId("B"), 1) };
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
-            var domainEvents = new List<IDomainEvent> { new MarchandiseReceived(0) };
+            var domainEvents = new List<IDomainEvent> { new MarchandiseReceived(new OrderId("1"), 0) };
             var evt = new EventsWrapper(new OrderId("B"), domainEvents, 1);
 
             pendingOrderEventHandler.Handle(evt);

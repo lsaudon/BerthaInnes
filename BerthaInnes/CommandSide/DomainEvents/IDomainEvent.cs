@@ -1,4 +1,7 @@
 ﻿namespace BerthaInnes.Domain.CommandSide.DomainEvents
 {
-    public interface IDomainEvent { }
+    public interface IDomainEvent
+    {
+        object GetAggregateId();
+    }
 }

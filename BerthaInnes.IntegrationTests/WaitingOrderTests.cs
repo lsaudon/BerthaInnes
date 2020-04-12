@@ -25,7 +25,7 @@ namespace BerthaInnes.IntegrationTests
             var colisList = new List<Colis> { new Colis() };
 
             var commandHandler = new CommandHandler(pubSub, eventStore);
-            commandHandler.Handle(new StartOrder(colisList));
+            commandHandler.Handle(new StartOrder(new OrderId("1"), colisList));
 
             Assert.Single(repository);
             Assert.Equal(new OrderId("1"), repository.First().Id);

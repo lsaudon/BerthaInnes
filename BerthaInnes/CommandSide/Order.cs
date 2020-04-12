@@ -26,9 +26,9 @@ namespace BerthaInnes.Domain.CommandSide
 
         private static IEnumerable<IDomainEvent> Decide(StartOrder startOrder, DecisionProjection decisionProjection)
         {
-            if (decisionProjection.IsStarted) return new List<IDomainEvent>();
-
-            return new List<IDomainEvent> { new OrderStarted(startOrder.ColisList.Count) };
+            return decisionProjection.IsStarted
+                ? new List<IDomainEvent>()
+                : new List<IDomainEvent> { new OrderStarted(startOrder.Id, startOrder.ColisList.Count) };
         }
 
         private static IEnumerable<IDomainEvent> Decide(TakeMarchandise takeMarchandise, DecisionProjection decisionProjection)
@@ -42,7 +42,7 @@ namespace BerthaInnes.Domain.CommandSide
                 var numberColisRemaining = decisionProjection.NumberColisRemaining - takeMarchandise.ColisList.Count;
                 return new List<IDomainEvent>
                 {
-                    new MarchandisePartiallyReceived(numberColisRemaining)
+                    new MarchandisePartiallyReceived(takeMarchandise.Id, numberColisRemaining)
                 };
             }
 
@@ -51,12 +51,12 @@ namespace BerthaInnes.Domain.CommandSide
                 var numberColisExcess = takeMarchandise.ColisList.Count - decisionProjection.NumberColisRemaining;
                 return new List<IDomainEvent>
                 {
-                    new MarchandiseReceived(decisionProjection.NumberColisRemaining),
-                    new MarchandiseExcessReceived(numberColisExcess)
+                    new MarchandiseReceived(takeMarchandise.Id,decisionProjection.NumberColisRemaining),
+                    new MarchandiseExcessReceived(takeMarchandise.Id,numberColisExcess)
                 };
             }
 
-            return new List<IDomainEvent> { new MarchandiseReceived(0) };
+            return new List<IDomainEvent> { new MarchandiseReceived(takeMarchandise.Id, 0) };
         }
 
         private class DecisionProjection

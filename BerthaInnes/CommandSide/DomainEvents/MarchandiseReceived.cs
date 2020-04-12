@@ -2,11 +2,19 @@
 {
     public struct MarchandiseReceived : IDomainEvent
     {
+        public OrderId Id { get; }
+
         public int NumberColisRemaining { get; }
 
-        public MarchandiseReceived(int numberColisRemaining)
+        public MarchandiseReceived(OrderId id, int numberColisRemaining)
         {
+            Id = id;
             NumberColisRemaining = numberColisRemaining;
+        }
+
+        public object GetAggregateId()
+        {
+            return Id;
         }
     }
 }
