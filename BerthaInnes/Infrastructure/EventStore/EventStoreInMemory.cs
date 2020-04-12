@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;

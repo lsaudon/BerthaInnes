@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using BerthaInnes.Domain.CommandSide.DomainEvents;
-using BerthaInnes.Domain.QuerySide;
-using BerthaInnes.Infrastructure.EventStore;
-using Xunit;
+﻿using Xunit;
 
 namespace BerthaInnes.Tests.Infrastructure.EventStore
 {

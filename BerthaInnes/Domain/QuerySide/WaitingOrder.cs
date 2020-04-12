@@ -1,5 +1,4 @@
 ﻿using BerthaInnes.Domain.CommandSide;
-using BerthaInnes.Infrastructure.EventStore;
 
 namespace BerthaInnes.Domain.QuerySide
 {

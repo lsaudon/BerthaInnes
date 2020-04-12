@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
-using BerthaInnes.Infrastructure.EventStore;
 
 namespace BerthaInnes.Domain.QuerySide
 {

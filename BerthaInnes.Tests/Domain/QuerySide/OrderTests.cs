@@ -2,7 +2,6 @@
 using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
-using BerthaInnes.Infrastructure.EventStore;
 using Xunit;
 
 namespace BerthaInnes.Tests.Domain.QuerySide
