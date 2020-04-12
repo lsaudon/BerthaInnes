@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using BerthaInnes.Domain.CommandSide;
+﻿using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
-using BerthaInnes.Domain.QuerySide;
 using BerthaInnes.Infrastructure.EventStore;
 using Xunit;
 
@@ -15,8 +13,8 @@ namespace BerthaInnes.Infrastructure.Tests.EventStore
         {
             var eventStore = new EventStoreInFiles();
 
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new OrderStarted()}, 1));
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new MarchandiseReceived()}, 2));
+            eventStore.Add(new OrderStarted(new OrderId("1"), 5), 1);
+            eventStore.Add(new MarchandiseReceived(new OrderId("1"), 5), 2);
 
             var events = eventStore.GetAll(new OrderId("1"));
 
@@ -30,9 +28,9 @@ namespace BerthaInnes.Infrastructure.Tests.EventStore
         {
             var eventStore = new EventStoreInFiles();
 
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new OrderStarted()}, 1));
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new MarchandiseReceived()}, 2));
-            eventStore.Add(new EventsWrapper(new OrderId("2"), new List<IDomainEvent> {new OrderStarted()}, 1));
+            eventStore.Add(new OrderStarted(new OrderId("1"), 5), 1);
+            eventStore.Add(new MarchandiseReceived(new OrderId("1"), 5), 2);
+            eventStore.Add(new OrderStarted(new OrderId("2"), 5), 1);
 
             var events = eventStore.GetAll(new OrderId("1"));
 
@@ -46,12 +44,11 @@ namespace BerthaInnes.Infrastructure.Tests.EventStore
         {
             var eventStore = new EventStoreInFiles();
 
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new OrderStarted()}, 1));
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new MarchandiseReceived()}, 2));
+            eventStore.Add(new OrderStarted(new OrderId("1"), 5), 1);
+            eventStore.Add(new MarchandiseReceived(new OrderId("1"), 5), 2);
 
             Assert.Throws<SequenceAlreadyStoredException>(()
-                => eventStore.Add(new EventsWrapper(new OrderId("1"),
-                    new List<IDomainEvent> {new MarchandiseReceived()}, 2)));
+                => eventStore.Add(new MarchandiseReceived(new OrderId("1"), 5), 1));
 
             eventStore.Clear(new OrderId("1"));
         }

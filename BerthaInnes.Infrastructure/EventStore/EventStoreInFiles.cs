@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using BerthaInnes.Domain;
 using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
-using BerthaInnes.Domain.QuerySide;
 using Newtonsoft.Json;
 
 namespace BerthaInnes.Infrastructure.EventStore
@@ -42,15 +40,13 @@ namespace BerthaInnes.Infrastructure.EventStore
             File.Delete(GetFileName(aggregateId.Value));
         }
 
-        public void Add(EventsWrapper eventsWrapper)
+        public void Add(IDomainEvent domainEvent, int sequenceId)
         {
-            var sequenceId = GetSequenceId(eventsWrapper.AggregateId);
-            if (sequenceId >= eventsWrapper.SequenceId) throw new SequenceAlreadyStoredException();
+            if (GetSequenceId(domainEvent.GetAggregateId()) >= sequenceId) throw new SequenceAlreadyStoredException();
 
-            var lines = eventsWrapper.DomainEvents
-                .Select(domainEvent => JsonConvert.SerializeObject(domainEvent, _jsonSerializerSettings));
+            var line = JsonConvert.SerializeObject(domainEvent, _jsonSerializerSettings);
 
-            File.AppendAllLines(GetFileName(eventsWrapper.AggregateId.Value), lines);
+            File.AppendAllLines(GetFileName(domainEvent.GetAggregateId().Value), new[] {line});
         }
 
         private int GetSequenceId(IAggregateId aggregateId)

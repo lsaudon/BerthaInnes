@@ -2,7 +2,6 @@
 using BerthaInnes.Domain;
 using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
-using BerthaInnes.Domain.QuerySide;
 
 namespace BerthaInnes.Infrastructure.EventStore
 {
@@ -23,22 +22,37 @@ namespace BerthaInnes.Infrastructure.EventStore
             _dictionary.Remove(aggregateId);
         }
 
-        public void Add(EventsWrapper eventsWrapper)
-        {
-            if (_dictionary.ContainsKey(eventsWrapper.AggregateId))
-            {
-                var domainEvents = _dictionary[eventsWrapper.AggregateId];
-                var sequenceId = domainEvents.Count;
-                if (sequenceId >= eventsWrapper.SequenceId) throw new SequenceAlreadyStoredException();
+        //public void Add(EventsWrapper eventsWrapper)
+        //{
+        //    if (_dictionary.ContainsKey(eventsWrapper.AggregateId))
+        //    {
+        //        var domainEvents = _dictionary[eventsWrapper.AggregateId];
+        //        var sequenceId = domainEvents.Count;
+        //        if (sequenceId >= eventsWrapper.SequenceId) throw new SequenceAlreadyStoredException();
 
-                domainEvents.AddRange(eventsWrapper.DomainEvents);
+        //        domainEvents.AddRange(eventsWrapper.DomainEvents);
+        //        return;
+        //    }
+
+        //    foreach (var domainEvent in eventsWrapper.DomainEvents)
+        //    {
+        //        _dictionary.Add(eventsWrapper.AggregateId, new List<IDomainEvent> { domainEvent });
+        //    }
+        //}
+
+        public void Add(IDomainEvent domainEvent, int sequenceId)
+        {
+            IAggregateId aggregateId = domainEvent.GetAggregateId();
+            if (_dictionary.ContainsKey(aggregateId))
+            {
+                var domainEvents = _dictionary[aggregateId];
+                if (domainEvents.Count >= sequenceId) throw new SequenceAlreadyStoredException();
+
+                domainEvents.Add(domainEvent);
                 return;
             }
 
-            foreach (var domainEvent in eventsWrapper.DomainEvents)
-            {
-                _dictionary.Add(eventsWrapper.AggregateId, new List<IDomainEvent> {domainEvent});
-            }
+            _dictionary.Add(aggregateId, new List<IDomainEvent> { domainEvent });
         }
     }
 }

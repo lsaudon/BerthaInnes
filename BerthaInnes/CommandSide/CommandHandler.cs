@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using BerthaInnes.Domain.CommandSide.DomainCommands;
-using BerthaInnes.Domain.QuerySide;
+﻿using BerthaInnes.Domain.CommandSide.DomainCommands;
 
 namespace BerthaInnes.Domain.CommandSide
 {
-    public class CommandHandler : ICommandHandler
+    public class CommandHandler :
+        ICommandHandler<StartOrder>,
+        ICommandHandler<TakeMarchandise>
     {
         private readonly IEventPublisher _eventPublisher;
         private readonly IEventStore _eventStoreInMemory;
@@ -15,14 +15,27 @@ namespace BerthaInnes.Domain.CommandSide
             _eventStoreInMemory = eventStoreInMemory;
         }
 
-        public void Handle(IDomainCommand domainCommand)
+        public void Handle(StartOrder command)
         {
-            var orderId = new OrderId("1");
+            var stream = _eventStoreInMemory.GetAll(command.Id);
 
-            var stream = _eventStoreInMemory.GetAll(orderId);
-            var domainEvents = Order.Decide(domainCommand, stream).ToList();
+            var domainEvents = Order.Decide(command, stream);
 
-            _eventPublisher.Publish(new EventsWrapper(orderId, domainEvents, stream.Count));
+            foreach (var domainEvent in domainEvents)
+            {
+                _eventPublisher.Publish(domainEvent, stream.Count);
+            }
+        }
+
+        public void Handle(TakeMarchandise command)
+        {
+            var stream = _eventStoreInMemory.GetAll(command.Id);
+            var domainEvents = Order.Decide(command, stream);
+
+            foreach (var domainEvent in domainEvents)
+            {
+                _eventPublisher.Publish(domainEvent, stream.Count);
+            }
         }
     }
 }

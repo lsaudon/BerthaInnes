@@ -2,8 +2,9 @@
 
 namespace BerthaInnes.Domain.CommandSide
 {
-    public interface ICommandHandler
+    public interface ICommandHandler<in TCommand> : IDomainCommand
+        where TCommand : IDomainCommand
     {
-        void Handle(IDomainCommand domainCommand);
+        void Handle(TCommand command);
     }
 }

@@ -11,7 +11,7 @@
             NumberColisRemaining = numberColisRemaining;
         }
 
-        public object GetAggregateId()
+        public IAggregateId GetAggregateId()
         {
             return Id;
         }

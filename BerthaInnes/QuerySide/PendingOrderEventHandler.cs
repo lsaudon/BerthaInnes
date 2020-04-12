@@ -3,7 +3,7 @@ using BerthaInnes.Domain.CommandSide.DomainEvents;
 
 namespace BerthaInnes.Domain.QuerySide
 {
-    public class PendingOrderEventHandler : IEventHandler<OrderStarted>, IEventHandler<MarchandiseReceived>
+    public class PendingOrderEventHandler : IEventHandler
     {
         private readonly List<WaitingOrder> _repository;
 
@@ -12,35 +12,16 @@ namespace BerthaInnes.Domain.QuerySide
             _repository = repository;
         }
 
-        public void Handle(OrderStarted evt)
+        public void Handle(IDomainEvent evt)
         {
-            var waitingOrder = new WaitingOrder(evt.Id, evt.NumberColis);
-            _repository.Add(waitingOrder);
-        }
-
-        public void Handle(MarchandiseReceived evt)
-        {
-            _repository.RemoveAll(w => Equals(w.Id, evt.Id));
-        }
-
-        public void Handle(EventsWrapper evt)
-        {
-            foreach (var domainEvent in evt.DomainEvents)
+            if (evt is OrderStarted orderStarted)
             {
-                switch (domainEvent)
-                {
-                    case OrderStarted orderStarted:
-                    {
-                        var waitingOrder = new WaitingOrder(evt.AggregateId, orderStarted.NumberColis);
-                        _repository.Add(waitingOrder);
-                        break;
-                    }
-                    case MarchandiseReceived _:
-                    {
-                        _repository.RemoveAll(w => Equals(w.Id, evt.AggregateId));
-                        break;
-                    }
-                }
+                var waitingOrder = new WaitingOrder(orderStarted.Id, orderStarted.NumberColis);
+                _repository.Add(waitingOrder);
+            }
+            else if (evt is MarchandiseReceived marchandiseReceived)
+            {
+                _repository.RemoveAll(w => Equals(w.Id, marchandiseReceived.Id));
             }
         }
     }

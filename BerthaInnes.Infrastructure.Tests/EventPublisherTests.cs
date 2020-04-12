@@ -2,6 +2,7 @@
 using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
+using BerthaInnes.Infrastructure.EventStore;
 using Xunit;
 
 namespace BerthaInnes.Infrastructure.Tests
@@ -11,13 +12,12 @@ namespace BerthaInnes.Infrastructure.Tests
         [Fact]
         public void Should_Store_Events_When_Publish_Event()
         {
-            var eventStore = new List<EventsWrapper>();
-            var pubSub = new EventPublisher(eventStore, new List<IEventHandler>());
+            var eventStore = new EventStoreInMemory();
+            var eventPublisher = new EventPublisher(eventStore, new List<IEventHandler>());
 
-            var domainEvents = new List<IDomainEvent> {new OrderStarted(new OrderId("1"), 1)};
-            pubSub.Publish(new EventsWrapper(new OrderId("1"), domainEvents, 1));
+            eventPublisher.Publish(new OrderStarted(new OrderId("1"), 1), 1);
 
-            Assert.Contains(new EventsWrapper(new OrderId("1"), domainEvents, 1), eventStore);
+            Assert.Contains(new OrderStarted(new OrderId("1"), 1), eventStore.GetAll(new OrderId("1")));
         }
 
         [Fact]
@@ -25,13 +25,12 @@ namespace BerthaInnes.Infrastructure.Tests
         {
             var repository = new List<WaitingOrder>();
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
-            var eventHandlers = new List<IEventHandler> {pendingOrderEventHandler};
+            var eventHandlers = new List<IEventHandler> { pendingOrderEventHandler };
+             
+            var eventStore = new EventStoreInMemory();
+            var eventPublisher = new EventPublisher(eventStore, eventHandlers);
 
-            var eventStore = new List<EventsWrapper>();
-            var pubSub = new EventPublisher(eventStore, eventHandlers);
-
-            var domainEvents = new List<IDomainEvent> {new OrderStarted(new OrderId("1"), 1)};
-            pubSub.Publish(new EventsWrapper(new OrderId("1"), domainEvents, 1));
+            eventPublisher.Publish(new OrderStarted(new OrderId("1"), 1), 1);
 
             Assert.Single(repository);
         }

@@ -14,10 +14,7 @@ namespace BerthaInnes.Domain.Tests.QuerySide
             var repository = new List<WaitingOrder>();
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
 
-            var domainEvents = new List<IDomainEvent> {new OrderStarted(new OrderId("1"), 1)};
-            var evt = new EventsWrapper(new OrderId("1"), domainEvents, 1);
-
-            pendingOrderEventHandler.Handle(evt);
+            pendingOrderEventHandler.Handle(new OrderStarted(new OrderId("1"), 1));
 
             Assert.Single(repository);
         }
@@ -27,10 +24,8 @@ namespace BerthaInnes.Domain.Tests.QuerySide
         {
             var repository = new List<WaitingOrder> {new WaitingOrder(new OrderId("1"), 1)};
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
-            var domainEvents = new List<IDomainEvent> {new MarchandiseReceived(new OrderId("1"), 1)};
-            var evt = new EventsWrapper(new OrderId("1"), domainEvents, 1);
 
-            pendingOrderEventHandler.Handle(evt);
+            pendingOrderEventHandler.Handle(new MarchandiseReceived(new OrderId("1"), 1));
 
             Assert.Empty(repository);
         }
@@ -44,10 +39,8 @@ namespace BerthaInnes.Domain.Tests.QuerySide
                 new WaitingOrder(new OrderId("A"), 1), new WaitingOrder(new OrderId("B"), 1)
             };
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
-            var domainEvents = new List<IDomainEvent> {new MarchandiseReceived(new OrderId("1"), 0)};
-            var evt = new EventsWrapper(new OrderId("B"), domainEvents, 1);
 
-            pendingOrderEventHandler.Handle(evt);
+            pendingOrderEventHandler.Handle(new MarchandiseReceived(new OrderId("B"), 0));
 
             Assert.Single(repository);
             Assert.Contains(repository, x => Equals(x.Id, new OrderId("A")));

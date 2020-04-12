@@ -2,6 +2,6 @@
 {
     public interface IDomainEvent
     {
-        object GetAggregateId();
+        IAggregateId GetAggregateId();
     }
 }

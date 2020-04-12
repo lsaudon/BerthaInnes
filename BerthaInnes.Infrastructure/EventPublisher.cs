@@ -1,26 +1,27 @@
 ﻿using System.Collections.Generic;
 using BerthaInnes.Domain;
+using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
 
 namespace BerthaInnes.Infrastructure
 {
     public class EventPublisher : IEventPublisher
     {
-        private readonly List<EventsWrapper> _eventStore;
-        private readonly List<IEventHandler> _eventHandlers;
+        private readonly IEventStore _eventStore;
+        private readonly IList<IEventHandler> _eventHandlers;
 
-        public EventPublisher(List<EventsWrapper> eventStore, List<IEventHandler> eventHandlers)
+        public EventPublisher(IEventStore eventStore, IList<IEventHandler> eventHandlers)
         {
             _eventStore = eventStore;
             _eventHandlers = eventHandlers;
         }
 
-        public void Publish(EventsWrapper eventsWrapper)
+        public void Publish<TEvent>(TEvent evt, int sequenceId) where TEvent : IDomainEvent
         {
-            _eventStore.Add(eventsWrapper);
+            _eventStore.Add(evt, sequenceId);
             foreach (var eventHandler in _eventHandlers)
             {
-                eventHandler.Handle(eventsWrapper);
+                eventHandler.Handle(evt);
             }
         }
     }

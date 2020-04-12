@@ -1,9 +1,9 @@
-﻿using BerthaInnes.Domain.QuerySide;
+﻿using BerthaInnes.Domain.CommandSide.DomainEvents;
 
 namespace BerthaInnes.Domain
 {
     public interface IEventPublisher
     {
-        void Publish(EventsWrapper eventsWrapper);
+        void Publish<TEvent>(TEvent evt, int sequenceId) where TEvent : IDomainEvent;
     }
 }

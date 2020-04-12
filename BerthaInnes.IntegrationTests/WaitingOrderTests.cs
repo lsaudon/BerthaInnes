@@ -15,16 +15,14 @@ namespace BerthaInnes.IntegrationTests
         public void Should_Display_Updated_Projection_When_Send_Command()
         {
             var repository = new List<WaitingOrder>();
-            var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
-            var eventHandlers = new List<IEventHandler> {pendingOrderEventHandler};
+            IEventHandler pendingOrderEventHandler = new PendingOrderEventHandler(repository);
+            IList<IEventHandler> eventHandlers = new List<IEventHandler> {pendingOrderEventHandler};
 
-            var eventStoreLegacy = new List<EventsWrapper>();
             var eventStore = new EventStoreInMemory();
-            var pubSub = new EventPublisher(eventStoreLegacy, eventHandlers);
+            var eventPublisher = new EventPublisher(eventStore, eventHandlers);
+            var commandHandler = new CommandHandler(eventPublisher, eventStore);
 
             var colisList = new List<Colis> {new Colis()};
-
-            var commandHandler = new CommandHandler(pubSub, eventStore);
             commandHandler.Handle(new StartOrder(new OrderId("1"), colisList));
 
             Assert.Single(repository);

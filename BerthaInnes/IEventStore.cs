@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
-using BerthaInnes.Domain.QuerySide;
 
 namespace BerthaInnes.Domain
 {
@@ -9,6 +8,6 @@ namespace BerthaInnes.Domain
     {
         List<IDomainEvent> GetAll(IAggregateId aggregateId);
         void Clear(IAggregateId aggregateId);
-        void Add(EventsWrapper eventsWrapper);
+        void Add(IDomainEvent domainEvent, int sequenceId);
     }
 }

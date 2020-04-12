@@ -4,7 +4,6 @@ using System.Text;
 using BerthaInnes.Domain;
 using BerthaInnes.Domain.CommandSide;
 using BerthaInnes.Domain.CommandSide.DomainEvents;
-using BerthaInnes.Domain.QuerySide;
 using EventStore.ClientAPI;
 using Newtonsoft.Json;
 
@@ -13,7 +12,7 @@ namespace BerthaInnes.Infrastructure.EventStore
     public class EventStoreInEventStore : IEventStore
     {
         private readonly JsonSerializerSettings _jsonSerializerSettings =
-            new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.All};
+            new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
         private static IEventStoreConnection Connection()
         {
@@ -46,19 +45,15 @@ namespace BerthaInnes.Infrastructure.EventStore
             throw new NotImplementedException();
         }
 
-        public void Add(EventsWrapper eventsWrapper)
+        public void Add(IDomainEvent domainEvent, int sequenceId)
         {
             var connection = Connection();
 
-            List<EventData> eventDatas = new List<EventData>();
+            var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(domainEvent, _jsonSerializerSettings));
+            var metadata = Encoding.UTF8.GetBytes("{}");
+            var eventPayload = new EventData(Guid.NewGuid(), "event-type", true, data, metadata);
 
-            foreach (var domainEvent in eventsWrapper.DomainEvents)
-            {
-                var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(domainEvent, _jsonSerializerSettings));
-                var metadata = Encoding.UTF8.GetBytes("{}");
-                var eventPayload = new EventData(Guid.NewGuid(), "event-type", true, data, metadata);
-                eventDatas.Add(eventPayload);
-            }
+            List<EventData> eventDatas = new List<EventData> { eventPayload };
 
             connection.AppendToStreamAsync("stream-order", ExpectedVersion.Any, eventDatas).Wait();
             connection.Close();
