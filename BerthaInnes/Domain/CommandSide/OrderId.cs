@@ -1,4 +1,4 @@
-﻿namespace BerthaInnes.Infrastructure.EventStore
+﻿namespace BerthaInnes.Domain.CommandSide
 {
     public struct OrderId : IAggregateId
     {
