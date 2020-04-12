@@ -6,12 +6,12 @@ namespace BerthaInnes.Domain.CommandSide
 {
     public class CommandHandler : ICommandHandler
     {
-        private readonly IPubSub _pubSub;
+        private readonly IEventPublisher _eventPublisher;
         private readonly IEventStore _eventStoreInMemory;
 
-        public CommandHandler(IPubSub pubSub, IEventStore eventStoreInMemory)
+        public CommandHandler(IEventPublisher eventPublisher, IEventStore eventStoreInMemory)
         {
-            _pubSub = pubSub;
+            _eventPublisher = eventPublisher;
             _eventStoreInMemory = eventStoreInMemory;
         }
 
@@ -22,7 +22,7 @@ namespace BerthaInnes.Domain.CommandSide
             var stream = _eventStoreInMemory.GetAll(orderId);
             var domainEvents = Order.Decide(domainCommand, stream).ToList();
 
-            _pubSub.Publish(new EventsWrapper(orderId, domainEvents, stream.Count));
+            _eventPublisher.Publish(new EventsWrapper(orderId, domainEvents, stream.Count));
         }
     }
 }

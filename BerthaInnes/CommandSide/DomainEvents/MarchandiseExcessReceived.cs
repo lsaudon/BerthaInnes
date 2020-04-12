@@ -3,7 +3,6 @@
     public struct MarchandiseExcessReceived : IDomainEvent
     {
         public OrderId Id { get; }
-
         public int NumberColisExcess { get; }
 
         public MarchandiseExcessReceived(OrderId id, int numberColisExcess)

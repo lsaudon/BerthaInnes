@@ -6,13 +6,13 @@ using Xunit;
 
 namespace BerthaInnes.Infrastructure.Tests
 {
-    public class PubSubTests
+    public class EventPublisherTests
     {
         [Fact]
         public void Should_Store_Events_When_Publish_Event()
         {
             var eventStore = new List<EventsWrapper>();
-            var pubSub = new PubSub(eventStore, new List<IEventHandler>());
+            var pubSub = new EventPublisher(eventStore, new List<IEventHandler>());
 
             var domainEvents = new List<IDomainEvent> {new OrderStarted(new OrderId("1"), 1)};
             pubSub.Publish(new EventsWrapper(new OrderId("1"), domainEvents, 1));
@@ -28,7 +28,7 @@ namespace BerthaInnes.Infrastructure.Tests
             var eventHandlers = new List<IEventHandler> {pendingOrderEventHandler};
 
             var eventStore = new List<EventsWrapper>();
-            var pubSub = new PubSub(eventStore, eventHandlers);
+            var pubSub = new EventPublisher(eventStore, eventHandlers);
 
             var domainEvents = new List<IDomainEvent> {new OrderStarted(new OrderId("1"), 1)};
             pubSub.Publish(new EventsWrapper(new OrderId("1"), domainEvents, 1));

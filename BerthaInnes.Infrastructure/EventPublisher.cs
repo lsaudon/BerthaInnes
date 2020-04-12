@@ -4,12 +4,12 @@ using BerthaInnes.Domain.QuerySide;
 
 namespace BerthaInnes.Infrastructure
 {
-    public class PubSub : IPubSub
+    public class EventPublisher : IEventPublisher
     {
         private readonly List<EventsWrapper> _eventStore;
         private readonly List<IEventHandler> _eventHandlers;
 
-        public PubSub(List<EventsWrapper> eventStore, List<IEventHandler> eventHandlers)
+        public EventPublisher(List<EventsWrapper> eventStore, List<IEventHandler> eventHandlers)
         {
             _eventStore = eventStore;
             _eventHandlers = eventHandlers;

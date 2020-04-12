@@ -20,7 +20,7 @@ namespace BerthaInnes.IntegrationTests
 
             var eventStoreLegacy = new List<EventsWrapper>();
             var eventStore = new EventStoreInMemory();
-            var pubSub = new PubSub(eventStoreLegacy, eventHandlers);
+            var pubSub = new EventPublisher(eventStoreLegacy, eventHandlers);
 
             var colisList = new List<Colis> {new Colis()};
 

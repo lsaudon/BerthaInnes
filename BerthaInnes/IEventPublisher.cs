@@ -2,7 +2,7 @@
 
 namespace BerthaInnes.Domain
 {
-    public interface IPubSub
+    public interface IEventPublisher
     {
         void Publish(EventsWrapper eventsWrapper);
     }

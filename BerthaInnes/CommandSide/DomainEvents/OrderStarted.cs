@@ -3,7 +3,6 @@
     public struct OrderStarted : IDomainEvent
     {
         public OrderId Id { get; }
-
         public int NumberColis { get; }
 
         public OrderStarted(OrderId id, int numberColis)
