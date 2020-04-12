@@ -44,19 +44,4 @@ namespace BerthaInnes.Infrastructure.EventStore
             return _dictionary[aggregateId].Count;
         }
     }
-
-    public interface IAggregateId
-    {
-        string Value { get; }
-    }
-
-    public struct OrderId : IAggregateId
-    {
-        public string Value { get; }
-
-        public OrderId(string value)
-        {
-            Value = value;
-        }
-    }
 }

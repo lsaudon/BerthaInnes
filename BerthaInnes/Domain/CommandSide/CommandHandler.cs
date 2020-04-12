@@ -6,11 +6,6 @@ using BerthaInnes.Infrastructure.EventStore;
 
 namespace BerthaInnes.Domain.CommandSide
 {
-    public interface ICommandHandler
-    {
-        void Handle(IDomainCommand domainCommand);
-    }
-
     public class CommandHandler : ICommandHandler
     {
         private readonly PubSub _pubSub;
