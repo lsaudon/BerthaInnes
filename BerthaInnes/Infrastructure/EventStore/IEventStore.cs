@@ -10,6 +10,5 @@ namespace BerthaInnes.Infrastructure.EventStore
         List<IDomainEvent> GetAll(IAggregateId aggregateId);
         void Clear(IAggregateId aggregateId);
         void Add(EventsWrapper eventsWrapper);
-        int GetSequenceId(IAggregateId aggregateId);
     }
 }

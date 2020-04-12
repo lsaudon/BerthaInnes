@@ -38,10 +38,5 @@ namespace BerthaInnes.Infrastructure.EventStore
                 _dictionary.Add(eventsWrapper.AggregateId, new List<IDomainEvent> { domainEvent });
             }
         }
-
-        public int GetSequenceId(IAggregateId aggregateId)
-        {
-            return _dictionary[aggregateId].Count;
-        }
     }
 }

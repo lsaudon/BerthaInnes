@@ -49,7 +49,7 @@ namespace BerthaInnes.Infrastructure.EventStore
             File.AppendAllLines(GetFileName(eventsWrapper.AggregateId.Value), lines);
         }
 
-        public int GetSequenceId(IAggregateId aggregateId)
+        private int GetSequenceId(IAggregateId aggregateId)
         {
             return File.Exists(GetFileName(aggregateId.Value)) 
                 ? File.ReadAllLines(GetFileName(aggregateId.Value)).Length 

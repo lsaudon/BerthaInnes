@@ -60,10 +60,5 @@ namespace BerthaInnes.Infrastructure.EventStore
             connection.AppendToStreamAsync("stream-order", ExpectedVersion.Any, eventDatas).Wait();
             connection.Close();
         }
-
-        public int GetSequenceId(IAggregateId aggregateId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
