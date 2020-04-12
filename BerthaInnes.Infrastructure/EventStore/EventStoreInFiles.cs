@@ -52,8 +52,8 @@ namespace BerthaInnes.Infrastructure.EventStore
 
         private int GetSequenceId(IAggregateId aggregateId)
         {
-            return File.Exists(GetFileName(aggregateId.Value)) 
-                ? File.ReadAllLines(GetFileName(aggregateId.Value)).Length 
+            return File.Exists(GetFileName(aggregateId.Value))
+                ? File.ReadAllLines(GetFileName(aggregateId.Value)).Length
                 : 0;
         }
 

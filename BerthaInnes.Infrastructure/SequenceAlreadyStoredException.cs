@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BerthaInnes.Infrastructure.EventStore
+namespace BerthaInnes.Domain
 {
     public class SequenceAlreadyStoredException : Exception
     {

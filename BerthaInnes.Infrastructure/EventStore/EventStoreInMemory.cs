@@ -12,8 +12,8 @@ namespace BerthaInnes.Infrastructure.EventStore
 
         public List<IDomainEvent> GetAll(IAggregateId aggregateId)
         {
-            return _dictionary.ContainsKey(aggregateId) 
-                ? _dictionary[aggregateId] 
+            return _dictionary.ContainsKey(aggregateId)
+                ? _dictionary[aggregateId]
                 : new List<IDomainEvent>();
         }
 

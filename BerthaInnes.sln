@@ -14,9 +14,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BerthaInnes.Domain.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BerthaInnes.IntegrationTests", "BerthaInnes.IntegrationTests\BerthaInnes.IntegrationTests.csproj", "{9076BE33-7080-4461-ACC5-471F77F54565}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BerthaInnes.Infrastructure", "BerthaInnes.Infrastructure\BerthaInnes.Infrastructure.csproj", "{D39E2E43-4D2C-4DF4-BBF8-139FDD8E6E0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BerthaInnes.Infrastructure", "BerthaInnes.Infrastructure\BerthaInnes.Infrastructure.csproj", "{D39E2E43-4D2C-4DF4-BBF8-139FDD8E6E0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BerthaInnes.Infrastructure.Tests", "BerthaInnes.Infrastructure.Tests\BerthaInnes.Infrastructure.Tests.csproj", "{C9485D9E-1EC5-49D2-9A21-773B6C834741}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BerthaInnes.Infrastructure.Tests", "BerthaInnes.Infrastructure.Tests\BerthaInnes.Infrastructure.Tests.csproj", "{C9485D9E-1EC5-49D2-9A21-773B6C834741}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3DB343FE-ABB8-4714-8016-2D085F8B404A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D7A500B7-BBBC-4A13-83F2-B3A7C4423E5E} = {3DB343FE-ABB8-4714-8016-2D085F8B404A}
+		{9076BE33-7080-4461-ACC5-471F77F54565} = {3DB343FE-ABB8-4714-8016-2D085F8B404A}
+		{C9485D9E-1EC5-49D2-9A21-773B6C834741} = {3DB343FE-ABB8-4714-8016-2D085F8B404A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E3090396-63E7-4499-8E0E-33D805A075FC}
