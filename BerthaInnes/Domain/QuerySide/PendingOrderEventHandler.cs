@@ -19,17 +19,17 @@ namespace BerthaInnes.Domain.QuerySide
                 switch (domainEvent)
                 {
                     case OrderStarted orderStarted:
-                    {
+                        {
 
-                        var waitingOrder = new WaitingOrder(evt.AggregateId, orderStarted.NumberColis);
-                        _repository.Add(waitingOrder);
-                        break;
-                    }
+                            var waitingOrder = new WaitingOrder(evt.AggregateId, orderStarted.NumberColis);
+                            _repository.Add(waitingOrder);
+                            break;
+                        }
                     case MarchandiseReceived _:
-                    {
-                        _repository.RemoveAll(w => w.Id == evt.AggregateId);
-                        break;
-                    }
+                        {
+                            _repository.RemoveAll(w => Equals(w.Id, evt.AggregateId));
+                            break;
+                        }
                 }
             }
         }

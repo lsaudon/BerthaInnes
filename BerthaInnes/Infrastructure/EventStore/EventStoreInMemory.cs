@@ -9,39 +9,39 @@ namespace BerthaInnes.Infrastructure.EventStore
     {
         private readonly Dictionary<IAggregateId, List<IDomainEvent>> _dictionary = new Dictionary<IAggregateId, List<IDomainEvent>>();
 
-        public List<IDomainEvent> GetAll(string aggregateId)
+        public List<IDomainEvent> GetAll(IAggregateId aggregateId)
         {
-            if (_dictionary.ContainsKey(new OrderId(aggregateId)))
-            {
-                return _dictionary[new OrderId(aggregateId)];
-            }
-
-            return new List<IDomainEvent>();
+            return _dictionary.ContainsKey(aggregateId) 
+                ? _dictionary[aggregateId] 
+                : new List<IDomainEvent>();
         }
 
-        public void Clear(string aggregateId)
+        public void Clear(IAggregateId aggregateId)
         {
-            _dictionary.Remove(new OrderId(aggregateId));
+            _dictionary.Remove(aggregateId);
         }
 
         public void Add(EventsWrapper eventsWrapper)
         {
-            if (_dictionary.ContainsKey(new OrderId(eventsWrapper.AggregateId)))
+            if (_dictionary.ContainsKey(eventsWrapper.AggregateId))
             {
-                var domainEvents = _dictionary[new OrderId(eventsWrapper.AggregateId)];
+                var domainEvents = _dictionary[eventsWrapper.AggregateId];
                 var sequenceId = domainEvents.Count;
                 if (sequenceId >= eventsWrapper.SequenceId) throw new SequenceAlreadyStoredException();
-                domainEvents.Add(eventsWrapper.DomainEvents.First());
+
+                domainEvents.AddRange(eventsWrapper.DomainEvents);
+                return;
             }
-            else
+
+            foreach (var domainEvent in eventsWrapper.DomainEvents)
             {
-                _dictionary.Add(new OrderId(eventsWrapper.AggregateId), new List<IDomainEvent> { eventsWrapper.DomainEvents.First() });
+                _dictionary.Add(eventsWrapper.AggregateId, new List<IDomainEvent> { domainEvent });
             }
         }
 
-        public int GetSequenceId(string aggregateId)
+        public int GetSequenceId(IAggregateId aggregateId)
         {
-            return _dictionary[new OrderId(aggregateId)].Count;
+            return _dictionary[aggregateId].Count;
         }
     }
 

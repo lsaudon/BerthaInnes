@@ -17,9 +17,9 @@ namespace BerthaInnes.Infrastructure.EventStore
             Directory.CreateDirectory(_folder);
         }
 
-        public List<IDomainEvent> GetAll(string aggregateId)
+        public List<IDomainEvent> GetAll(IAggregateId aggregateId)
         {
-            var file = File.ReadAllLines(GetFileName(aggregateId));
+            var file = File.ReadAllLines(GetFileName(aggregateId.Value));
             var domainEvents = new List<IDomainEvent>();
             foreach (var line in file)
             {
@@ -32,9 +32,9 @@ namespace BerthaInnes.Infrastructure.EventStore
             return domainEvents;
         }
 
-        public void Clear(string aggregateId)
+        public void Clear(IAggregateId aggregateId)
         {
-            File.Delete(GetFileName(aggregateId));
+            File.Delete(GetFileName(aggregateId.Value));
         }
 
         public void Add(EventsWrapper eventsWrapper)
@@ -45,13 +45,13 @@ namespace BerthaInnes.Infrastructure.EventStore
             var lines = eventsWrapper.DomainEvents
                 .Select(domainEvent => JsonConvert.SerializeObject(domainEvent, _jsonSerializerSettings));
 
-            File.AppendAllLines(GetFileName(eventsWrapper.AggregateId), lines);
+            File.AppendAllLines(GetFileName(eventsWrapper.AggregateId.Value), lines);
         }
 
-        public int GetSequenceId(string aggregateId)
+        public int GetSequenceId(IAggregateId aggregateId)
         {
-            return File.Exists(GetFileName(aggregateId)) 
-                ? File.ReadAllLines(GetFileName(aggregateId)).Length 
+            return File.Exists(GetFileName(aggregateId.Value)) 
+                ? File.ReadAllLines(GetFileName(aggregateId.Value)).Length 
                 : 0;
         }
 

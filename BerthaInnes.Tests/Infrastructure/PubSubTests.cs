@@ -2,6 +2,7 @@
 using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
 using BerthaInnes.Infrastructure;
+using BerthaInnes.Infrastructure.EventStore;
 using Xunit;
 
 namespace BerthaInnes.Tests.Infrastructure
@@ -15,9 +16,9 @@ namespace BerthaInnes.Tests.Infrastructure
             var pubSub = new PubSub(eventStore, new List<IEventHandler>());
 
             var domainEvents = new List<IDomainEvent> { new OrderStarted(1) };
-            pubSub.Publish(new EventsWrapper("1", domainEvents, 1));
+            pubSub.Publish(new EventsWrapper(new OrderId("1"), domainEvents, 1));
 
-            Assert.Contains(new EventsWrapper("1", domainEvents, 1), eventStore);
+            Assert.Contains(new EventsWrapper(new OrderId("1"), domainEvents, 1), eventStore);
         }
 
         [Fact]
@@ -32,7 +33,7 @@ namespace BerthaInnes.Tests.Infrastructure
             var pubSub = new PubSub(eventStore, eventHandlers);
 
             var domainEvents = new List<IDomainEvent> { new OrderStarted(1) };
-            pubSub.Publish(new EventsWrapper("1", domainEvents, 1));
+            pubSub.Publish(new EventsWrapper(new OrderId("1"), domainEvents, 1));
 
             Assert.Single(repository);
         }

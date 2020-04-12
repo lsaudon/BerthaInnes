@@ -6,9 +6,9 @@ namespace BerthaInnes.Infrastructure.EventStore
 {
     public interface IEventStore
     {
-        List<IDomainEvent> GetAll(string aggregateId);
-        void Clear(string aggregateId);
+        List<IDomainEvent> GetAll(IAggregateId aggregateId);
+        void Clear(IAggregateId aggregateId);
         void Add(EventsWrapper eventsWrapper);
-        int GetSequenceId(string aggregateId);
+        int GetSequenceId(IAggregateId aggregateId);
     }
 }

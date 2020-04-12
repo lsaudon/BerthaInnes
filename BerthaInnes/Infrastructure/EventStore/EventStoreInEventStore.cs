@@ -19,7 +19,7 @@ namespace BerthaInnes.Infrastructure.EventStore
             return connection;
         }
 
-        public List<IDomainEvent> GetAll(string aggregateId)
+        public List<IDomainEvent> GetAll(IAggregateId aggregateId)
         {
             var connection = Connection();
             var readEvents = connection.ReadStreamEventsForwardAsync("newstream", 0, 10, true).Result;
@@ -37,7 +37,7 @@ namespace BerthaInnes.Infrastructure.EventStore
             return domainEvents;
         }
 
-        public void Clear(string aggregateId)
+        public void Clear(IAggregateId aggregateId)
         {
             throw new NotImplementedException();
         }
@@ -60,7 +60,7 @@ namespace BerthaInnes.Infrastructure.EventStore
             connection.Close();
         }
 
-        public int GetSequenceId(string aggregateId)
+        public int GetSequenceId(IAggregateId aggregateId)
         {
             throw new NotImplementedException();
         }

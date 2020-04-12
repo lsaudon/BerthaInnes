@@ -28,7 +28,7 @@ namespace BerthaInnes.IntegrationTests
             commandHandler.Handle(new StartOrder(colisList));
 
             Assert.Single(repository);
-            Assert.Equal("1", repository.First().Id);
+            Assert.Equal(new OrderId("1"), repository.First().Id);
             Assert.Equal(1, repository.First().NumberColis);
         }
     }

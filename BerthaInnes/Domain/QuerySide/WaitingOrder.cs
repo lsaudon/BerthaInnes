@@ -1,11 +1,13 @@
-﻿namespace BerthaInnes.Domain.QuerySide
+﻿using BerthaInnes.Infrastructure.EventStore;
+
+namespace BerthaInnes.Domain.QuerySide
 {
     public struct WaitingOrder
     {
-        public string Id { get; }
+        public IAggregateId Id { get; }
         public int NumberColis { get; }
 
-        public WaitingOrder(string id, int numberColis)
+        public WaitingOrder(IAggregateId id, int numberColis)
         {
             Id = id;
             NumberColis = numberColis;

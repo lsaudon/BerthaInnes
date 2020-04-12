@@ -24,7 +24,7 @@ namespace BerthaInnes.Domain.CommandSide
 
         public void Handle(IDomainCommand domainCommand)
         {
-            var orderId = "1";
+            var orderId = new OrderId("1");
 
             var stream = _eventStoreInMemory.GetAll(orderId);
             var domainEvents = Order.Decide(domainCommand, stream).ToList();

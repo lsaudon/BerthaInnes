@@ -14,13 +14,13 @@ namespace BerthaInnes.Tests.Infrastructure.EventStore
         {
             var eventStore = new EventStoreInFiles();
 
-            eventStore.Add(new EventsWrapper("1", new List<IDomainEvent> { new OrderStarted() }, 1));
-            eventStore.Add(new EventsWrapper("1", new List<IDomainEvent> { new MarchandiseReceived() }, 2));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new OrderStarted() }, 1));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new MarchandiseReceived() }, 2));
 
-            var events = eventStore.GetAll("1");
+            var events = eventStore.GetAll(new OrderId("1"));
 
             Assert.Equal(2, events.Count);
-            eventStore.Clear("1");
+            eventStore.Clear(new OrderId("1"));
         }
 
         [Fact]
@@ -28,15 +28,15 @@ namespace BerthaInnes.Tests.Infrastructure.EventStore
         {
             var eventStore = new EventStoreInFiles();
 
-            eventStore.Add(new EventsWrapper("1", new List<IDomainEvent> { new OrderStarted() }, 1));
-            eventStore.Add(new EventsWrapper("1", new List<IDomainEvent> { new MarchandiseReceived() }, 2));
-            eventStore.Add(new EventsWrapper("2", new List<IDomainEvent> { new OrderStarted() }, 1));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new OrderStarted() }, 1));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new MarchandiseReceived() }, 2));
+            eventStore.Add(new EventsWrapper(new OrderId("2"), new List<IDomainEvent> { new OrderStarted() }, 1));
 
-            var events = eventStore.GetAll("1");
+            var events = eventStore.GetAll(new OrderId("1"));
 
             Assert.Equal(2, events.Count);
-            eventStore.Clear("1");
-            eventStore.Clear("2");
+            eventStore.Clear(new OrderId("1"));
+            eventStore.Clear(new OrderId("2"));
         }
 
         [Fact]
@@ -44,13 +44,13 @@ namespace BerthaInnes.Tests.Infrastructure.EventStore
         {
             var eventStore = new EventStoreInFiles();
 
-            eventStore.Add(new EventsWrapper("1", new List<IDomainEvent> { new OrderStarted() }, 1));
-            eventStore.Add(new EventsWrapper("1", new List<IDomainEvent> { new MarchandiseReceived() }, 2));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new OrderStarted() }, 1));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new MarchandiseReceived() }, 2));
 
             Assert.Throws<SequenceAlreadyStoredException>(()
-                => eventStore.Add(new EventsWrapper("1", new List<IDomainEvent> { new MarchandiseReceived() }, 2)));
+                => eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new MarchandiseReceived() }, 2)));
 
-            eventStore.Clear("1");
+            eventStore.Clear(new OrderId("1"));
         }
     }
 }
