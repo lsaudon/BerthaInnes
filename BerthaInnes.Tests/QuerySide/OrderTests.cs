@@ -4,7 +4,7 @@ using BerthaInnes.Domain.CommandSide.DomainEvents;
 using BerthaInnes.Domain.QuerySide;
 using Xunit;
 
-namespace BerthaInnes.Domain.Tests.Domain.QuerySide
+namespace BerthaInnes.Domain.Tests.QuerySide
 {
     public class OrderTests
     {
