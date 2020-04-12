@@ -60,40 +60,31 @@ namespace BerthaInnes.Domain.CommandSide
             return new List<IDomainEvent> {new MarchandiseReceived(takeMarchandise.Id, 0)};
         }
 
-        private class DecisionProjection
+        private class DecisionProjection : DecisionProjectionBase
         {
             public bool IsStarted { get; private set; }
             public bool IsMarchandiseReceived { get; private set; }
             public int NumberColisRemaining { get; private set; }
 
-            public void Apply(IDomainEvent domainEvent)
+            public DecisionProjection()
             {
-                switch (domainEvent)
-                {
-                    case OrderStarted orderStarted:
-                        Apply(orderStarted);
-                        break;
-                    case MarchandisePartiallyReceived marchandisePartiallyReceived:
-                        Apply(marchandisePartiallyReceived);
-                        break;
-                    case MarchandiseReceived marchandiseReceived:
-                        Apply(marchandiseReceived);
-                        break;
-                }
+                AddHandler<OrderStarted>(When);
+                AddHandler<MarchandisePartiallyReceived>(When);
+                AddHandler<MarchandiseReceived>(When);
             }
 
-            private void Apply(OrderStarted orderStarted)
+            private void When(OrderStarted orderStarted)
             {
                 IsStarted = true;
                 NumberColisRemaining = orderStarted.NumberColis;
             }
 
-            private void Apply(MarchandisePartiallyReceived marchandisePartiallyReceived)
+            private void When(MarchandisePartiallyReceived marchandisePartiallyReceived)
             {
                 NumberColisRemaining = marchandisePartiallyReceived.NumberColisRemaining;
             }
-
-            private void Apply(MarchandiseReceived marchandiseReceived)
+ 
+            private void When(MarchandiseReceived marchandiseReceived)
             {
                 IsMarchandiseReceived = true;
                 NumberColisRemaining = marchandiseReceived.NumberColisRemaining;
