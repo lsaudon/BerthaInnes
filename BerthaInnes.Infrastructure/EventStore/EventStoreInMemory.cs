@@ -8,7 +8,8 @@ namespace BerthaInnes.Infrastructure.EventStore
 {
     public class EventStoreInMemory : IEventStore
     {
-        private readonly Dictionary<IAggregateId, List<IDomainEvent>> _dictionary = new Dictionary<IAggregateId, List<IDomainEvent>>();
+        private readonly Dictionary<IAggregateId, List<IDomainEvent>> _dictionary =
+            new Dictionary<IAggregateId, List<IDomainEvent>>();
 
         public List<IDomainEvent> GetAll(IAggregateId aggregateId)
         {
@@ -36,7 +37,7 @@ namespace BerthaInnes.Infrastructure.EventStore
 
             foreach (var domainEvent in eventsWrapper.DomainEvents)
             {
-                _dictionary.Add(eventsWrapper.AggregateId, new List<IDomainEvent> { domainEvent });
+                _dictionary.Add(eventsWrapper.AggregateId, new List<IDomainEvent> {domainEvent});
             }
         }
     }

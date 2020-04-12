@@ -12,7 +12,8 @@ namespace BerthaInnes.Infrastructure.EventStore
 {
     public class EventStoreInEventStore : IEventStore
     {
-        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+        private readonly JsonSerializerSettings _jsonSerializerSettings =
+            new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.All};
 
         private static IEventStoreConnection Connection()
         {
@@ -30,7 +31,8 @@ namespace BerthaInnes.Infrastructure.EventStore
             List<IDomainEvent> domainEvents = new List<IDomainEvent>();
             foreach (var evt in readEvents.Events)
             {
-                var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(Encoding.UTF8.GetString(evt.Event.Data), _jsonSerializerSettings);
+                var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(Encoding.UTF8.GetString(evt.Event.Data),
+                    _jsonSerializerSettings);
                 if (domainEvent == null) continue;
 
                 domainEvents.Add(domainEvent);

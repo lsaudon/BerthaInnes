@@ -1,4 +1,6 @@
 ﻿namespace BerthaInnes.Domain.CommandSide.DomainCommands
 {
-    public interface IDomainCommand { }
+    public interface IDomainCommand
+    {
+    }
 }

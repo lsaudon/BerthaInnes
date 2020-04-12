@@ -12,7 +12,9 @@ namespace BerthaInnes.Infrastructure.EventStore
     public class EventStoreInFiles : IEventStore
     {
         private const string _folder = "EventStore";
-        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+
+        private readonly JsonSerializerSettings _jsonSerializerSettings =
+            new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.All};
 
         public EventStoreInFiles()
         {
@@ -31,6 +33,7 @@ namespace BerthaInnes.Infrastructure.EventStore
 
                 domainEvents.Add(domainEvent);
             }
+
             return domainEvents;
         }
 

@@ -16,13 +16,13 @@ namespace BerthaInnes.IntegrationTests
         {
             var repository = new List<WaitingOrder>();
             var pendingOrderEventHandler = new PendingOrderEventHandler(repository);
-            var eventHandlers = new List<IEventHandler> { pendingOrderEventHandler };
+            var eventHandlers = new List<IEventHandler> {pendingOrderEventHandler};
 
             var eventStoreLegacy = new List<EventsWrapper>();
             var eventStore = new EventStoreInMemory();
             var pubSub = new PubSub(eventStoreLegacy, eventHandlers);
 
-            var colisList = new List<Colis> { new Colis() };
+            var colisList = new List<Colis> {new Colis()};
 
             var commandHandler = new CommandHandler(pubSub, eventStore);
             commandHandler.Handle(new StartOrder(new OrderId("1"), colisList));

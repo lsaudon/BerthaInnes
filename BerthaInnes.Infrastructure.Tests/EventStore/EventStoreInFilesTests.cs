@@ -15,8 +15,8 @@ namespace BerthaInnes.Infrastructure.Tests.EventStore
         {
             var eventStore = new EventStoreInFiles();
 
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new OrderStarted() }, 1));
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new MarchandiseReceived() }, 2));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new OrderStarted()}, 1));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new MarchandiseReceived()}, 2));
 
             var events = eventStore.GetAll(new OrderId("1"));
 
@@ -25,13 +25,14 @@ namespace BerthaInnes.Infrastructure.Tests.EventStore
         }
 
         [Fact]
-        public void Should_Return_only_events_of_aggregate_instance_when_get_all_events_of_aggregate_instance_after_store_events_of_several_aggregate_instances()
+        public void
+            Should_Return_only_events_of_aggregate_instance_when_get_all_events_of_aggregate_instance_after_store_events_of_several_aggregate_instances()
         {
             var eventStore = new EventStoreInFiles();
 
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new OrderStarted() }, 1));
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new MarchandiseReceived() }, 2));
-            eventStore.Add(new EventsWrapper(new OrderId("2"), new List<IDomainEvent> { new OrderStarted() }, 1));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new OrderStarted()}, 1));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new MarchandiseReceived()}, 2));
+            eventStore.Add(new EventsWrapper(new OrderId("2"), new List<IDomainEvent> {new OrderStarted()}, 1));
 
             var events = eventStore.GetAll(new OrderId("1"));
 
@@ -45,11 +46,12 @@ namespace BerthaInnes.Infrastructure.Tests.EventStore
         {
             var eventStore = new EventStoreInFiles();
 
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new OrderStarted() }, 1));
-            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new MarchandiseReceived() }, 2));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new OrderStarted()}, 1));
+            eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> {new MarchandiseReceived()}, 2));
 
             Assert.Throws<SequenceAlreadyStoredException>(()
-                => eventStore.Add(new EventsWrapper(new OrderId("1"), new List<IDomainEvent> { new MarchandiseReceived() }, 2)));
+                => eventStore.Add(new EventsWrapper(new OrderId("1"),
+                    new List<IDomainEvent> {new MarchandiseReceived()}, 2)));
 
             eventStore.Clear(new OrderId("1"));
         }
