@@ -12,7 +12,7 @@ namespace BerthaInnes.Infrastructure.EventStore
         private const string _folder = "EventStore";
 
         private readonly JsonSerializerSettings _jsonSerializerSettings =
-            new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.All};
+            new() { TypeNameHandling = TypeNameHandling.All };
 
         public EventStoreInFiles()
         {
@@ -46,10 +46,10 @@ namespace BerthaInnes.Infrastructure.EventStore
 
             var line = JsonConvert.SerializeObject(domainEvent, _jsonSerializerSettings);
 
-            File.AppendAllLines(GetFileName(domainEvent.GetAggregateId().Value), new[] {line});
+            File.AppendAllLines(GetFileName(domainEvent.GetAggregateId().Value), new[] { line });
         }
 
-        private int GetSequenceId(IAggregateId aggregateId)
+        private static int GetSequenceId(IAggregateId aggregateId)
         {
             return File.Exists(GetFileName(aggregateId.Value))
                 ? File.ReadAllLines(GetFileName(aggregateId.Value)).Length

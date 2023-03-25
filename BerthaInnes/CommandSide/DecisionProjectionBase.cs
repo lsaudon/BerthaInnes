@@ -6,11 +6,11 @@ namespace BerthaInnes.Domain.CommandSide
 {
     public abstract class DecisionProjectionBase
     {
-        private readonly Dictionary<Type, Action<IDomainEvent>> _handlersByType = new Dictionary<Type, Action<IDomainEvent>>();
+        private readonly Dictionary<Type, Action<IDomainEvent>> _handlersByType = new();
 
         public void Apply(IDomainEvent evt)
         {
-            if (_handlersByType.TryGetValue(evt.GetType(), out Action<IDomainEvent> apply))
+            if (_handlersByType.TryGetValue(evt.GetType(), out var apply))
             {
                 apply(evt);
             }

@@ -1,6 +1,6 @@
 ﻿namespace BerthaInnes.Domain.CommandSide.DomainEvents
 {
-    public struct MarchandisePartiallyReceived : IDomainEvent
+    public record MarchandisePartiallyReceived : IDomainEvent
     {
         public OrderId Id { get; }
 

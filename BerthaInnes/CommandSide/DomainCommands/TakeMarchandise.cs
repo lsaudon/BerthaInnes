@@ -2,7 +2,7 @@
 
 namespace BerthaInnes.Domain.CommandSide.DomainCommands
 {
-    public struct TakeMarchandise : IDomainCommand
+    public record TakeMarchandise : IDomainCommand
     {
         public OrderId Id { get; }
         public List<Colis> ColisList { get; }

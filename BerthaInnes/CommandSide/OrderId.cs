@@ -1,6 +1,6 @@
 ﻿namespace BerthaInnes.Domain.CommandSide
 {
-    public struct OrderId : IAggregateId
+    public record OrderId : IAggregateId
     {
         public string Value { get; }
 

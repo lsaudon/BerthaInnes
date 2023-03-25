@@ -1,6 +1,6 @@
 ﻿namespace BerthaInnes.Domain.CommandSide.DomainEvents
 {
-    public struct OrderStarted : IDomainEvent
+    public record OrderStarted : IDomainEvent
     {
         public OrderId Id { get; }
         public int NumberColis { get; }
